@@ -1,10 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title will be set by JavaScript -->
     <title data-i18n="docTitle">ReachGold (리치골드) - 사업 계획서</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Load KR, TH, and EN (Noto Sans) fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     
     <style>
@@ -18,7 +23,11 @@
             font-family: 'Noto Sans KR', 'Noto Sans Thai', 'Noto Sans', sans-serif;
             background-color: #1E293B; /* Dark blue-gray background */
             color: #F1F5F9; /* Light text */
-            overflow: hidden; /* Hide main scrollbar */
+            /* === CRITICAL FIX === */
+            /* overflow: hidden; was causing the layout bug */
+            overflow-x: hidden;
+            overflow-y: auto; /* Ensure vertical scrolling is always possible */
+            /* === END FIX === */
         }
 
         /* Slide Container */
@@ -44,8 +53,10 @@
 
         /* Full Screen (App-like) Layout */
         #deck-container {
-            width: 100vw;
+            /* === LAYOUT FIX === */
+            width: 100%; /* Use 100% instead of 100vw for stability */
             height: 100vh;
+            /* === END FIX === */
             overflow-y: scroll;
             overflow-x: hidden;
             scroll-snap-type: y mandatory;
@@ -66,6 +77,7 @@
             top: 40px;
             left: 60px;
             width: calc(100% - 120px);
+            box-sizing: border-box;
         }
         
         /* Content Area */
@@ -111,7 +123,9 @@
         .footer {
             position: absolute;
             bottom: 20px;
-            width: 100%;
+            /* width: 100%; */
+            left: 60px;
+            right: 60px;
             text-align: center;
             font-size: 16px;
             color: #94A3B8;
@@ -119,10 +133,12 @@
 
         /* 2. Text + Image Layout */
         .text-content {
-            flex-basis: 55%;
+            flex-basis: 60%; /* FIX: Increased from 55% to give more space for text */
+            height: 100%;
+            overflow-y: auto;
         }
         .image-content {
-            flex-basis: 40%;
+            flex-basis: 35%; /* FIX: Reduced from 40% */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -166,15 +182,18 @@
         .tiled-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 25px;
+            gap: 20px; /* FIX: Reduced from 25px */
             width: 100%;
+            height: 100%;
         }
         .tile {
             background-color: #1E293B; /* Darker tile */
-            padding: 25px;
+            padding: 20px; /* FIX: Reduced from 25px */
             border-radius: 10px;
             border: 1px solid #334155;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
         .tile:hover {
             transform: translateY(-5px);
@@ -187,15 +206,16 @@
             margin-bottom: 15px;
         }
         .tile h3 {
-            font-size: 24px;
+            font-size: 22px; /* FIX: Reduced from 24px */
             font-weight: 700;
             color: #F1F5F9;
             margin-bottom: 10px;
         }
         .tile p {
-            font-size: 16px;
+            font-size: 15px; /* FIX: Reduced from 16px */
             color: #CBD5E1;
-            line-height: 1.6;
+            line-height: 1.5; /* FIX: Reduced from 1.6 */
+            flex-grow: 1;
         }
 
         /* 4. Chart Layout */
@@ -210,16 +230,23 @@
             position: relative;
             width: 300px;
             height: 300px;
+            flex-shrink: 0;
         }
         .pie-chart {
             width: 100%;
             height: 100%;
             border-radius: 50%;
+            /* Updated Chart:
+               40% Bundles (MRR)
+               30% Transaction (Fees)
+               20% Insurance (Add-ons)
+               10% Ads (GoldBits)
+            */
             background-image: conic-gradient(
-                #F59E0B 0% 40%,        /* Gold: 40% */
-                #0EA5E9 40% 75%,      /* Sky: 35% */
-                #F1F5F9 75% 85%,      /* White: 10% */
-                #475569 85% 100%       /* Slate: 15% */
+                #F59E0B 0% 40%,        /* Gold (Bundles): 40% */
+                #0EA5E9 40% 70%,      /* Sky (Transaction): 30% */
+                #475569 70% 90%,       /* Slate (Insurance): 20% */
+                #F1F5F9 90% 100%       /* White (Ads): 10% */
             );
         }
         .chart-legend ul {
@@ -237,6 +264,7 @@
             height: 20px;
             border-radius: 50%;
             margin-right: 15px;
+            flex-shrink: 0;
         }
         
         /* 5. Table Layout */
@@ -280,13 +308,18 @@
         /* 6. Roadmap Layout */
         .timeline-layout {
             position: relative;
+            width: 100%;
             max-width: 900px;
             margin: 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
         }
         ul.timeline {
             list-style-type: none;
             position: relative;
             padding-left: 100px; /* Space for the line */
+            width: 100%;
         }
         ul.timeline:before {
             content: ' ';
@@ -301,7 +334,7 @@
         .timeline-item {
             margin: 0;
             padding: 0;
-            margin-bottom: 10px; /* Reduced vertical spacing */
+            margin-bottom: 15px; /* Reduced vertical spacing */
             position: relative;
         }
         .timeline-item:last-child {
@@ -315,7 +348,7 @@
             border-radius: 50%;
             border: 3px solid #F59E0B;
             left: -59px; /* (100 padding - 41) -> 59. 41 = 49(line) - 8(radius) */
-            top: 20px; /* Align with text */
+            top: 18px; /* Align with text */
             width: 12px;
             height: 12px;
             z-index: 500;
@@ -438,6 +471,52 @@
             color: #0F172A;
             font-weight: 700;
         }
+
+        /* Utility */
+        .text-gold { color: #F59E0B; }
+        .text-sky { color: #0EA5E9; }
+        .text-slate { color: #475569; }
+        .text-white { color: #F1F5F9; }
+    
+/* === Compact 4-Box Tiles (height tuned) === */
+.tiled-content{
+    gap:16px;                 /* reduce inter-box gap */
+    align-items:stretch;      /* make tiles fill rows evenly */
+}
+.tile{
+    padding:16px;             /* tighten vertical padding */
+    border-radius:10px;
+}
+.tile .icon{
+    font-size:28px;           /* smaller icon */
+    margin-bottom:10px;
+    line-height:1;
+}
+.tile h3{
+    font-size:20px;           /* smaller title */
+    margin-bottom:8px; 
+    line-height:1.25;
+}
+.tile p{
+    font-size:14px;           /* smaller body copy */
+    line-height:1.45;
+}
+/* ensure content area gives tiles a bit more breathing room */
+.content-area{
+    gap:20px;
+}
+/* Slightly smaller slide title to reclaim vertical room */
+.slide-title{
+    font-size:36px;
+    top:36px;
+}
+/* Responsive guard for narrow displays */
+@media (max-height: 740px){
+  .slide-title{ font-size:34px; top:32px; }
+  .tile p{ font-size:13.5px; }
+}
+/* === End compact tiles === */
+
     </style>
 </head>
 <body>
@@ -445,36 +524,37 @@
 <div id="deck-container">
 
     <!-- Slide 1: Title -->
-    <div class="slide-container full-bg-image" id="slide1" style="background-image: url('https://placehold.co/1280x720/0F172A/F59E0B?text=Gold+Investment+in+Thailand&font=noto+sans+thai');">
+    <div class="slide-container full-bg-image" id="slide1" style="background-image: url('https://placehold.co/1280x720/0F172A/F5B90B?text=Gold+Investment+in+Thailand&font=noto+sans+thai');">
         <div class="content-overlay">
-            <h1>ReachGold (리치골드)</h1>
+            <!-- This H1 is now translatable -->
+            <h1 data-i18n="slide1_h1">ReachGold (리치골드)</h1>
             <p class="subtitle" data-i18n="slide1_subtitle">AI 기반 태국 O2O 금 거래 및 적립 플랫폼</p>
         </div>
         <div class="footer">
             <span data-i18n="slide1_footer_team">Presented by Team VivLeoN</span><br>
-            (<span data-i18n="slide1_footer_confidential">CONFIDENTIAL - 투자 유치 제안서</span> | <span data-i18n="slide1_footer_date">2025년 11월 7일</span>)
+            (<span data-i18n="slide1_footer_confidential">CONFIDENTIAL - 투자 유치 제안서</span> | <span data-i18n="slide1_footer_date">2025년 11월 12일</span>)
         </div>
     </div>
 
-    <!-- Slide 2: Executive Summary -->
+    <!-- Slide 2: Executive Summary (UPGRADED) -->
     <div class="slide-container" id="slide2">
         <h2 class="slide-title" data-i18n="slide2_title">Executive Summary (요약)</h2>
         <div class="content-area">
             <div class="text-content">
                 <p data-i18n="slide2_p1">
-                    <strong>[ReachGold]</strong>의 미션은 태국 시장에 가장 쉽고, 안전하며, 신뢰할 수 있는 '실물 연계 O2O 금 거래 및 적립' 플랫폼을 제공하는 것입니다.
+                    <strong>[ReachGold]</strong>의 미션은 태국 시장에 AI 기반 O2O 금 거래 플랫폼을 제공하는 것입니다. 당사는 **'AI + 자본 보호 보험'** 및 **'AI 초보자 모드'**를 결합하여 높은 LTV를, **'GoldBits™ 무료 티어 경제'** 및 합법적 MLM으로 낮은 CAC를 달성합니다.
                 </p>
                 <div class="bullet-list">
                     <ul>
                         <li><i class="fa-solid fa-gem"></i> <strong data-i18n="slide2_b1_strong">독점 공급망:</strong> <span data-i18n="slide2_b1_text">태국 현지 금광/정제소 파트너십으로 압도적 가격 경쟁력 확보.</span></li>
-                        <li><i class="fa-solid fa-brain"></i> <strong data-i18n="slide2_b2_strong">AI 핵심 전략 (AI-Driven):</strong> <span data-i18n="slide2_b2_text">AI KYC/챗봇으로 OPEX 절감, AI 타겟 광고로 LTV 극대화.</span></li>
+                        <li><i class="fa-solid fa-brain"></i> <strong data-i18n="slide2_b2_strong">AI + 보험 (LTV↑):</strong> <span data-i18n="slide2_b2_text">AI가 리스크를 동적 평가, '자본 보호(CP)' 보험 상품을 번들로 제공.</span></li>
                         <li><i class="fa-solid fa-store"></i> <strong data-i18n="slide2_b3_strong">O2O 하이브리드:</strong> <span data-i18n="slide2_b3_text">디지털로 간편하게 적립(Online)하고, 원할 때 실물 금으로 인출(Offline).</span></li>
-                        <li><i class="fa-solid fa-users"></i> <strong data-i18n="slide2_b4_strong">폭발적 바이럴 성장:</strong> <span data-i18n="slide2_b4_text">합법적 MLM과 '캐시워크형' 게이미피케이션으로 CAC 최소화.</span></li>
+                        <li><i class="fa-solid fa-coins"></i> <strong data-i18n="slide2_b4_strong">GoldBits™ 경제 (CAC↓):</strong> <span data-i18n="slide2_b4_text">'무료 체험(걷기/퀴즈)'으로 유저를 모객(DAU), 유료 구독(LTV)으로 전환.</span></li>
                     </ul>
                 </div>
             </div>
             <div class="image-content">
-                <img src="https://placehold.co/450x300/F59E0B/0F172A?text=Safe+Gold+Storage&font=noto+sans" alt="안전한 금 보관 이미지">
+                <img src="https://placehold.co/450x300/F59E0B/0F172A?text=AI+Managed+Vault&font=noto+sans" alt="AI 관리 금고 이미지">
             </div>
         </div>
     </div>
@@ -484,22 +564,22 @@
         <h2 class="slide-title" data-i18n="slide3_title">The Problem (시장의 문제점)</h2>
         <div class="content-area">
             <div class="text-content">
-                <p data-i18n="slide3_p1">태국은 세계적인 금 선호 국가이며 강력한 실물 투자 수요를 보유하고 있습니다. 하지만 개인 투자자들은 여전히 명확한 불편함(Pain Point)을 겪고 있습니다.</p>
+                <p data-i18n="slide3_p1">태국은 세계적인 금 선호 국가이며 강력한 실물 투자 수요를 보유하고 있습니다. 하지만 개인 투자자들, 특히 **초보자**들은 여전히 명확한 불편함(Pain Point)을 겪고 있습니다.</p>
                 <div class="bullet-list">
                     <ul>
                         <li><i class="fa-solid fa-coins"></i> <strong data-i18n="slide3_b1_strong">높은 진입 장벽:</strong> <span data-i18n="slide3_b1_text">기존 금은방/은행은 수수료가 높고, 소액(1g 미만) 투자가 거의 불가능합니다.</span></li>
-                        <li><i class="fa-solid fa-lock"></i> <strong data-i18n="slide3_b2_strong">보관 및 보안의 어려움:</strong> <span data-i18n="slide3_b2_text">실물 금을 개인이 보관하는 것은 도난 및 분실의 위험이 큽니다.</span></li>
+                        <li><i class="fa-solid fa-lock"></i> <strong data-i18n="slide3_b2_strong">변동성 리스크:</strong> <span data-i18n="slide3_b2_text">초보자는 구매 직후의 단기 가격 변동으로 인한 원금 손실(Drawdown)을 극도로 두려워합니다.</span></li>
                         <li><i class="fa-solid fa-walking"></i> <strong data-i18n="slide3_b3_strong">거래의 불편함:</strong> <span data-i18n="slide3_b3_text">금을 사고팔기 위해 매번 오프라인 매장을 방문해야 하는 번거로움이 있습니다.</span></li>
                     </ul>
                 </div>
             </div>
             <div class="image-content">
-                <img src="https://placehold.co/450x300/475569/F1F5F9?text=Traditional+Gold+Shop&font=noto+sans+thai" alt="전통 금은방 이미지">
+                <img src="https://placehold.co/450x300/475569/F1F5F9?text=Investment+Fear+Chart&font=noto+sans+thai" alt="투자 두려움 차트 이미지">
             </div>
         </div>
     </div>
 
-    <!-- Slide 4: The Solution -->
+    <!-- Slide 4: The Solution (UPGRADED) -->
     <div class="slide-container" id="slide4">
         <h2 class="slide-title" data-i18n="slide4_title">The Solution (우리의 해결책)</h2>
         <div class="content-area">
@@ -507,58 +587,58 @@
                 <p data-i18n="slide4_p1"><strong>[ReachGold]</strong>는 이 모든 문제를 해결하는 원스톱 하이브리드 솔루션입니다.</p>
                 <div class="bullet-list">
                     <ul>
-                        <li><i class="fa-solid fa-mobile-screen"></i> <strong data-i18n="slide4_b1_strong">간편한 소액 적립 (Online):</strong> <span data-i18n="slide4_b1_text">모바일을 통해 1g 미만의 소액(예: 100 THB)으로도 금을 '적립(GAR)'할 수 있습니다.</span></li>
-                        <li><i class="fa-solid fa-shield-halved"></i> <strong data-i18n="slide4_b2_strong">안전한 디지털 보관:</strong> <span data-i18n="slide4_b2_text">AI FDS가 24시간 자산을 보호하며, 모든 금은 파트너사의 전문 금고에 안전하게 보관됩니다.</span></li>
-                        <li><i class="fa-solid fa-hand-holding-dollar"></i> <strong data-i18n="slide4_b3_strong">자유로운 실물 인출 (Offline):</strong> <span data-i18n="slide4_b3_text">디지털로 모은 금을 언제든 신뢰할 수 있는 파트너(금은방)를 통해 원하는 디자인의 '실물 금'으로 직접 인출합니다.</span></li>
-                        <li><i class="fa-solid fa-globe"></i> <strong data-i18n="slide4_b4_strong">글로벌 UI/UX:</strong> <span data-i18n="slide4_b4_text">플로팅 버튼으로 (Th/En/Ko) 언어 전환, 모든 금액은 현지 화폐(THB)와 USD로 이중 표시.</span></li>
+                        <li><i class="fa-solid fa-baby"></i> <strong data-i18n="slide4_b1_strong">✨ AI 초보자 모드 (SafeStart):</strong> <span data-i18n="slide4_b1_text">원클릭 '안전 시작' 플로우, 소액(50-500 THB) 주문, AI가 쉬운 언어로 설명.</span></li>
+                        <li><i class="fa-solid fa-shield-halved"></i> <strong data-i18n="slide4_b2_strong">✨ 자본 보호 보험 (RG-CP):</strong> <span data-i18n="slide4_b2_text">구매 후 T+7일간 단기 변동성 리스크를 커버하는 옵션 제공. (초보자 리스크 해소)</span></li>
+                        <li><i class="fa-solid fa-globe"></i> <strong data-i18n="slide4_b3_strong">글로벌 UI/UX (i18n):</strong> <span data-i18n="slide4_b3_text">플로팅 버튼으로 (Th/En/Ko) 언어 전환, 모든 금액은 현지 화폐(THB)와 USD로 이중 표시.</span></li>
+                        <li><i class="fa-solid fa-hand-holding-dollar"></i> <strong data-i18n="slide4_b4_strong">자유로운 실물 인출 (Offline):</strong> <span data-i18n="slide4_b4_text">디지털로 모은 금을 언제든 신뢰할 수 있는 파트너(금은방)를 통해 '실물 금'으로 직접 인출.</span></li>
                     </ul>
                 </div>
             </div>
             <div class="image-content">
-                <img src="https://placehold.co/450x400/1E293B/F59E0B?text=ReachGold+App+UI&font=noto+sans" alt="ReachGold 앱 UI 예시">
+                <img src="https://placehold.co/450x400/1E293B/F59E0B?text=ReachGold+SafeStart+UI&font=noto+sans" alt="ReachGold 앱 UI 예시">
             </div>
         </div>
     </div>
 
-    <!-- Slide 5: Key Differentiators -->
+    <!-- Slide 5: 4 Core Product Pillars (UPGRADED) -->
     <div class="slide-container" id="slide5">
-        <h2 class="slide-title" data-i18n="slide5_title">핵심 경쟁력 (Key Differentiators)</h2>
+        <h2 class="slide-title" data-i18n="slide5_title">✨ 4대 핵심 제품 기둥</h2>
         <div class="content-area">
             <div class="tiled-content">
                 <div class="tile">
-                    <div class="icon"><i class="fa-solid fa-link"></i></div>
-                    <h3 data-i18n="slide5_t1_h3">독점적 공급망</h3>
-                    <p data-i18n="slide5_t1_p">태국 현지 금광/정제소 파트너십. 경쟁력 있는 가격과 안정적인 실물 금 공급.</p>
+                    <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3 data-i18n="slide5_t1_h3">Trade & Save (거래/적립)</h3>
+                    <p data-i18n="slide5_t1_p">그램(g) 또는 바트(THB) 단위로 간편하게 금을 거래/적립. (USD/THB 이중 가격 표시)</p>
                 </div>
                 <div class="tile">
-                    <div class="icon"><i class="fa-solid fa-sitemap"></i></div>
-                    <h3 data-i18n="slide5_t2_h3">합법적 바이럴 (MLM)</h3>
-                    <p data-i18n="slide5_t2_p">태국 직접판매법 준수. 가입비 X, 실제 거래 기반의 합법적 성과 보상.</p>
+                    <div class="icon"><i class="fa-solid fa-umbrella"></i></div>
+                    <h3 data-i18n="slide5_t2_h3">Insurance Suite (보험)</h3>
+                    <p data-i18n="slide5_t2_p">RG-CP(자본 보호), RG-CU(보관 손실) 등 AI 기반 동적 보험료 상품. (부가 수익 창출)</p>
                 </div>
                 <div class="tile">
-                    <div class="icon"><i class="fa-solid fa-gamepad"></i></div>
-                    <h3 data-i18n="slide5_t3_h3">게이미피케이션</h3>
-                    <p data-i18n="slide5_t3_p">'캐시워크' 모델. 걷기/출석/광고 시청으로 소액의 금을 보상. (DAU 확보, 광고 수익)</p>
+                    <div class="icon"><i class="fa-solid fa-box-archive"></i></div>
+                    <h3 data-i18n="slide5_t3_h3">Bundles (구독)</h3>
+                    <p data-i18n="slide5_t3_p">Basic/Plus/Max 등급의 MRR(월간 반복 수익) 모델. (수수료 할인, 보험 할인, AI 어드바이저 결합)</p>
                 </div>
                 <div class="tile">
-                    <div class="icon"><i class="fa-solid fa-building-columns"></i></div>
-                    <h3 data-i18n="slide5_t4_h3">린(Lean) 아키텍처</h3>
-                    <p data-i18n="slide5_t4_p">검증된 중앙화 원장과 AI 보안. 초기 투자 최소화 및 개발 속도 극대화.</p>
+                    <div class="icon"><i class="fa-solid fa-person-walking"></i></div>
+                    <h3 data-i18n="slide5_t4_h3">GoldBits™ (M2E 무료 티어)</h3>
+                    <p data-i18n="slide5_t4_p">걷기/퀴즈/광고로 GoldBits™(포인트) 획득. 수수료/보험료 쿠폰으로 교환. (CAC↓, LTV 전환 퍼널)</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Slide 6: Growth Strategy -->
+    <!-- Slide 6: Growth Strategy (UPGRADED) -->
     <div class="slide-container" id="slide6">
-        <h2 class="slide-title" data-i18n="slide6_title">성장 전략 (Low CAC Strategy)</h2>
+        <h2 class="slide-title" data-i18n="slide6_title">성장 전략 (Low CAC)</h2>
         <div class="content-area">
             <div class="text-content">
-                <p data-i18n="slide6_p1">핵심 경쟁력은 '합법적 바이럴'과 '게이미피케이션'을 통해 고객 획득 비용(CAC)을 0에 가깝게 수렴시키는 데 있습니다.</p>
+                <p data-i18n="slide6_p1">CAC(고객 획득 비용)를 0에 가깝게 수렴시키는 '합법적 바이럴'과 'GoldBits™ 경제'가 핵심입니다.</p>
                 <div class="bullet-list">
                     <ul>
-                        <li><i class="fa-solid fa-network-wired"></i> <strong data-i18n="slide6_b1_strong">MLM 바이럴 엔진:</strong> <span data-i18n="slide6_b1_text">실제 금 거래 수수료의 일부를 추천인(N단계)에게 보상. (불법 피라미드 X)</span></li>
-                        <li><i class="fa-solid fa-person-running"></i> <strong data-i18n="slide6_b2_strong">'캐시워크' 모델:</strong> <span data-i18n="slide6_b2_text">걷기/광고 시청으로 금 보상. (1) 광고 수익 창출, (2) DAU 확보, (3) 비투자 고객의 입금 전환 퍼널.</span></li>
+                        <li><i class="fa-solid fa-network-wired"></i> <strong data-i18n="slide6_b1_strong">MLM 바이럴 엔진:</strong> <span data-i18n="slide6_b1_text">추천인(N단계)에게 실제 거래 수수료의 %를 보상. (불법 피라미드 아님)</span></li>
+                        <li><i class="fa-solid fa-coins"></i> <strong data-i18n="slide6_b2_strong">✨ GoldBits™ 경제 (M2E):</strong> <span data-i18n="slide6_b2_text">걷기/퀴즈/광고로 GoldBits™(포인트) 획득. 수수료/보험료 쿠폰으로 교환(현금X). (1) 광고 수익, (2) DAU 확보, (3) 유료 구독 전환.</span></li>
                         <li><i class="fa-solid fa-lock"></i> <strong data-i18n="slide6_b3_strong">소셜 락인 (Lock-in):</strong> <span data-i18n="slide6_b3_text">금 선물하기, VIP 등급제, 커뮤니티 랭킹을 통해 지속적인 참여 유도.</span></li>
                     </ul>
                 </div>
@@ -569,28 +649,29 @@
         </div>
     </div>
     
-    <!-- Slide 7: Business Model -->
+    <!-- Slide 7: Business Model (UPGRADED) -->
     <div class="slide-container" id="slide7">
         <h2 class="slide-title" data-i18n="slide7_title">수익 모델 (Monetization)</h2>
         <div class="content-area">
             <div class="chart-layout">
                 <div class="pie-chart-container">
+                    <!-- Updated Chart -->
                     <div class="pie-chart"></div>
                 </div>
                 <div class="chart-legend">
                     <ul>
-                        <li><span class="legend-dot" style="background-color: #F59E0B;"></span> <strong data-i18n="slide7_l1">AI 타겟 광고 (40%)</strong></li>
-                        <li><span class="legend-dot" style="background-color: #0EA5E9;"></span> <strong data-i18n="slide7_l2">거래/적립 수수료 (35%)</strong></li>
-                        <li><span class="legend-dot" style="background-color: #475569;"></span> <strong data-i18n="slide7_l3">O2O 실물 인출 (15%)</strong></li>
-                        <li><span class="legend-dot" style="background-color: #F1F5F9;"></span> <strong data-i18n="slide7_l4">(Phase 2) 금 담보 대출 (10%)</strong></li>
+                        <li><span class="legend-dot" style="background-color: #F59E0B;"></span> <strong data-i18n="slide7_l1">✨ 구독/번들 수익 (MRR) (40%)</strong></li>
+                        <li><span class="legend-dot" style="background-color: #0EA5E9;"></span> <strong data-i18n="slide7_l2">거래/적립 수수료 (30%)</strong></li>
+                        <li><span class="legend-dot" style="background-color: #475569;"></span> <strong data-i18n="slide7_l3">✨ 보험 & 부가상품 (20%)</strong></li>
+                        <li><span class="legend-dot" style="background-color: #F1F5F9;"></span> <strong data-i18n="slide7_l4">AI 광고 (GoldBits™ 연동) (10%)</strong></li>
                     </ul>
-                    <p data-i18n="slide7_p1" style="color: #CBD5E1; font-size: 16px; margin-top: 20px;">* AI 타겟 광고는 '캐시워크형' 리워드 시스템과 연동되어<br>거래 수수료에 버금가는 핵심 수익원이 될 것입니다.</p>
+                    <p data-i18n="slide7_p1" style="color: #CBD5E1; font-size: 16px; margin-top: 20px;">* AI 광고(무료 티어)로 유입된 사용자를<br>고마진 **구독(유료 티어) 모델**로 전환시켜 LTV 극대화.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Slide 8: 3-Year ARPU Assumption -->
+    <!-- Slide 8: 3-Year ARPU Assumption (UPGRADED) -->
     <div class="slide-container" id="slide8">
         <h2 class="slide-title" data-i18n="slide8_title">핵심 성공 가정 (ARPU)</h2>
         <div class="content-area">
@@ -598,28 +679,28 @@
                 <div class="tile">
                     <div class="icon"><i class="fa-solid fa-users"></i></div>
                     <h3 data-i18n="slide8_t1_h3">전체 MAU (100%)</h3>
-                    <p data-i18n="slide8_t1_p">바이럴(MLM) 및 게이미피케이션으로 3차년도 70만 달성 목표.</p>
+                    <p data-i18n="slide8_t1_p">바이럴(MLM) 및 GoldBits™(M2E)로 3차년도 70만 달성 목표.</p>
                 </div>
                 <div class="tile">
                     <div class="icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-                    <h3 data-i18n="slide8_t2_h3">입금 사용자 (20% of MAU)</h3>
-                    <p data-i18n="slide8_t2_p">월 $10 ARPU (거래 수수료, O2O 수수료)</p>
+                    <h3 data-i18n="slide8_t2_h3">✨ 유료 티어 (Paid Tiers) (25%)</h3>
+                    <p data-i18n="slide8_t2_p">월 $12 ARPU (구독료 MRR, 거래/보험 수수료 할인 적용)</p>
                 </div>
                 <div class="tile">
                     <div class="icon"><i class="fa-solid fa-bullhorn"></i></div>
-                    <h3 data-i18n="slide8_t3_h3">비입금 사용자 (80% of MAU)</h3>
-                    <p data-i18n="slide8_t3_p">월 $1.25 ARPU (AI 타겟 광고 수익)</p>
+                    <h3 data-i18n="slide8_t3_h3">✨ 무료 티어 (Free Tier) (75%)</h3>
+                    <p data-i18n="slide8_t3_p">월 $0.67 ARPU (AI 타겟 광고 수익 - GoldBits™ 연동)</p>
                 </div>
                 <div class="tile" style="border-color: #F59E0B; background-color: #291D0E;">
                     <div class="icon"><i class="fa-solid fa-calculator"></i></div>
                     <h3 data-i18n="slide8_t4_h3">Blended ARPU (전체 기준)</h3>
-                    <p data-i18n="slide8_t4_p">($10 * 20%) + ($1.25 * 80%) = <strong>월 $3.00</strong><br>(Phase 2 대출 수익 추가 시 $3.25)</p>
+                    <p data-i18n="slide8_t4_p">($12 * 25%) + ($0.67 * 75%) = <strong>월 $3.50</strong><br>(기존 $3.00 모델 대비 ARPU 및 LTV 16% 상향)</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Slide 9: AI Strategy -->
+    <!-- Slide 9: AI Strategy (UPGRADED) -->
     <div class="slide-container" id="slide9">
         <h2 class="slide-title" data-i18n="slide9_title">AI 4대 핵심 전략 (Powered by Gemini)</h2>
         <div class="content-area">
@@ -627,22 +708,22 @@
                 <div class="tile">
                     <div class="icon"><i class="fa-solid fa-user-shield"></i></div>
                     <h3 data-i18n="slide9_t1_h3">✨ AI 기반 FDS & AML</h3>
-                    <p data-i18n="slide9_t1_p">Gemini가 실시간 거래/텍스트 패턴을 분석하여 자금 세탁, 어뷰징 링을 사전에 탐지 및 차단합니다.</p>
+                    <p data-i18n="slide9_t1_p">Gemini가 실시간 거래/텍스트 패턴을 분석하여 자금 세탁, 어뷰징 링을 사전에 탐지 및 차단합니다. (리스크 관리)</p>
                 </div>
                 <div class="tile">
-                    <div class="icon"><i class="fa-solid fa-comments-dollar"></i></div>
-                    <h3 data-i18n="slide9_t2_h3">✨ AI 챗봇 2.0 (자산 컨시어지)</h3>
-                    <p data-i18n="slide9_t2_p">단순 응대를 넘어, 복잡한 자산/MLM 성과 문의를 이해하고 응답하는 Gemini 기반 24/7 AI 비서.</p>
+                    <div class="icon"><i class="fa-solid fa-umbrella"></i></div>
+                    <h3 data-i18n="slide9_t2_h3">✨ AI 보험 동적 가격 책정</h3>
+                    <p data-i18n="slide9_t2_p">Gemini가 사용자 리스크 등급(A-E)과 시장 변동성(σ)을 분석하여 RG-CP 보험료를 실시간으로 책정합니다. (수익 극대화)</p>
                 </div>
                 <div class="tile">
                     <div class="icon"><i class="fa-solid fa-bullhorn"></i></div>
-                    <h3 data-i18n="slide9_t3_h3">✨ AI 동적 광고 엔진 (Gemini)</h3>
-                    <p data-i18n="slide9_t3_p">사용자 행동에 맞춰 Gemini가 실시간으로 '초개인화' 광고 카피를 생성, eCPM 및 LTV를 극대화합니다.</p>
+                    <h3 data-i18n="slide9_t3_h3">✨ AI 동적 광고 (GoldBits™)</h3>
+                    <p data-i18n="slide9_t3_p">Gemini가 '걷기 보상'을 '보험료 할인 쿠폰' 등과 연결하는 초개인화 광고를 생성, eCPM 및 유료 전환율을 극대화합니다.</p>
                 </div>
                 <div class="tile">
                     <div class="icon"><i class="fa-solid fa-user-graduate"></i></div>
-                    <h3 data-i18n="slide9_t4_h3">✨ AI 개인화 어드바이저 (Gemini)</h3>
-                    <p data-i18n="slide9_t4_p">사용자 목표(예: "결혼자금 100g")를 학습, 맞춤형 푸시/리포트를 제공하고 TTS 음성으로 브리핑합니다.</p>
+                    <h3 data-i18n="slide9_t4_h3">✨ AI 개인화 어드바이저 (HISO)</h3>
+                    <p data-i18n="slide9_t4_p">사용자 목표(예: "결혼자금 100g")를 학습, 맞춤형 푸시/리포트를 제공하고 프리미엄 TTS 음성으로 브리핑합니다.</p>
                 </div>
             </div>
         </div>
@@ -668,30 +749,35 @@
                     <h3 data-i18n="slide10_t3_h3">✨ AI 동적 광고 카피 (Gen-Text)</h3>
                     <p data-i18n="slide10_t3_p">Gemini가 '걷기 보상'을 '금 적립'과 연결하는 개인화 광고 카피를 실시간 생성하여 광고 수익(LTV)을 극대화합니다.</p>
                 </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-calculator"></i></div>
+                    <h3 data-i18n="slide10_t4_h3">✨ AI 보험 언더라이팅 (RAG)</h3>
+                    <p data-i18n="slide10_t4_p">Gemini (RAG)가 보험금 청구 시 FDS 데이터와 약관을 교차 검증하여, 자동 승인/거부/검토(Underwriter)로 분류합니다.</p>
+                </div>
             </div>
         </div>
     </div>
     
-    <!-- Slide 11: Legal & Risk -->
+    <!-- Slide 11: Legal & Risk (UPGRADED) -->
     <div class="slide-container" id="slide11">
         <h2 class="slide-title" data-i18n="slide11_title">법률 및 리스크 관리 (Risk Management)</h2>
         <div class="content-area">
             <div class="bullet-list">
                 <ul>
                     <li><i class="fa-solid fa-gavel"></i> <strong data-i18n="slide11_b1_strong">[최우선] MLM 법률 리스크 해소:</strong> <span data-i18n="slide11_b1_text">태국 '직접판매법(B.E. 2545)' 준수. (1) 가입비가 없고 (2) 보상이 '실제 금 거래' 수수료에 기반하므로 '합법적 MLM' 범주에 해당 (현지 로펌 검토 완료).</span></li>
-                    <li><i class="fa-solid fa-shield-virus"></i> <strong data-i18n="slide11_b2_strong">KYC/AML (자금세탁방지):</strong> <span data-i18n="slide11_b2_text">AI FDS와 NDID(태국 디지털 ID) 연동을 통해 현지 규정을 준수하는 강력한 신원 확인 및 자금세탁방지 체계를 구축합니다.</span></li>
-                    <li><i class="fa-solid fa-arrow-trend-down"></i> <strong data-i18n="slide11_b3_strong">시세 변동 리스크:</strong> <span data-i18n="slide11_b3_text">플랫폼이 보유한 금 재고(Inventory)에 대해서는 전문 헤징(Hedging) 전략을 통해 시세 변동 리스크를 최소화합니다.</span></li>
+                    <li><i class="fa-solid fa-shield-virus"></i> <strong data-i18n="slide11_b2_strong">KYC/AML (자금세탁방지):</strong> <span data-i18n="slide11_b2_text">AI FDS와 NDID(태국 디지털 ID) 및 Crypto Travel Rule(VASP 파트너) 연동으로 강력한 AML 체계 구축.</span></li>
+                    <li><i class="fa-solid fa-piggy-bank"></i> <strong data-i18n="slide11_b3_strong">✨ 보험 풀 지급여력 (Solvency):</strong> <span data-i18n="slide11_b3_text">보험 리스크 풀의 지급여력비율(>130%)을 실시간 모니터링. 손실율(LR) 급증 시 AI가 자동으로 보험료를 인상(S1)하거나 재보험(S3)을 실행.</span></li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <!-- Slide 12: Tech Architecture -->
+    <!-- Slide 12: Tech Architecture (UPGRADED) -->
     <div class="slide-container" id="slide12">
         <h2 class="slide-title" data-i18n="slide12_title">기술: 린(Lean) & 신뢰 아키텍처</h2>
         <div class="content-area" style="flex-direction: column; align-items: flex-start;">
-            <p style="font-size: 20px; margin-bottom: 20px; color: #CBD5E1;" data-i18n="slide12_p1">
-                <strong>핵심:</strong> 블록체인의 복잡성 대신, 검증된 <strong>'중앙화 디지털 원장(PostgreSQL)'</strong>과 암호화된 '불변 감사 로그'로 금융권 수준의 신뢰와 효율성을 확보합니다.
+            <p style="font-size: 18px; margin-bottom: 15px; color: #CBD5E1;" data-i18n="slide12_p1">
+                <strong>핵심:</strong> 검증된 <strong>'중앙화 디지털 원장(PostgreSQL)'</strong>과 암호화된 '불변 감사 로그'로 금융권 수준의 신뢰와 효율성을 확보합니다. (블록체인 복잡성 제거)
             </p>
             <div class="table-layout">
                 <table>
@@ -711,22 +797,22 @@
                         <tr>
                             <td data-i18n="slide12_r2c1">Backend</td>
                             <td><strong>C# .NET 8 (MSA), C++</strong></td>
-                            <td data-i18n="slide12_r2c3">검증된 MSA 성능, 실시간 시세/체결, <strong>USD/현지통화 환율 엔진</strong></td>
+                            <td data-i18n="slide12_r2c3">검증된 MSA 성능, 실시간 시세/체결, <strong>USD/현지통화 환율 엔진</strong>, 보험/구독 로직</td>
                         </tr>
                         <tr>
                             <td data-i18n="slide12_r3c1">Database</td>
                             <td><strong>PostgreSQL, Redis</strong></td>
-                            <td data-i18n="slide12_r3c3">금융 원장(ACID 보장) 및 실시간 시세/랭킹 캐싱</td>
+                            <td data-i18n="slide12_r3c3">금융/보험 원장(ACID 보장) 및 실시간 시세/랭킹 캐싱</td>
                         </tr>
                         <tr>
                             <td data-i18n="slide12_r4c1">AI / ML</td>
                             <td><strong>Python, Google Gemini API</strong></td>
-                            <td data-i18n="slide12_r4c3">FDS, KYC, 챗봇, 타겟 광고 등 AI 엔진 개발 및 API 서빙</td>
+                            <td data-i18n="slide12_r4c3">FDS, KYC, 챗봇, 동적 가격책정, 광고, 언더라이팅(RAG) 엔진</td>
                         </tr>
                         <tr>
-                            <td data-i18n="slide12_r5c1">Cloud Infra</td>
-                            <td><strong>AWS (EKS), Kubernetes</strong></td>
-                            <td data-i18n="slide12_r5c3">컨테이너 기반의 안정적인 MSA 배포 및 자동 스케일링</td>
+                            <td data-i18n="slide12_r5c1">Payments</td>
+                            <td><strong>✨ Payment Orchestrator</strong></td>
+                            <td data-i18n="slide12_r5c3">Card, QR(PromptPay), Bank, e-Wallet, <strong>Crypto(USDT)</strong> 등 모든 결제 수단 통합/라우팅</td>
                         </tr>
                     </tbody>
                 </table>
@@ -734,7 +820,7 @@
         </div>
     </div>
 
-    <!-- Slide 13: Financials -->
+    <!-- Slide 13: Financials (UPGRADED) -->
     <div class="slide-container" id="slide13">
         <h2 class="slide-title" data-i18n="slide13_title">3개년 재무 추정 (Pro-Forma P&L)</h2>
         <div class="content-area" style="flex-direction: column; align-items: flex-start;">
@@ -758,27 +844,27 @@
                         </tr>
                         <tr>
                             <td data-i18n="slide13_r2c1"><strong>2. Blended ARPU (월)</strong></td>
-                            <td>$3.00</td>
-                            <td>$3.00</td>
-                            <td>$3.25</td>
+                            <td><strong>$3.50</strong></td>
+                            <td><strong>$3.50</strong></td>
+                            <td>$3.75</td>
                         </tr>
                         <tr>
                             <td data-i18n="slide13_r3c1"><strong>3. 총 매출 (Revenue)</strong></td>
-                            <td><strong>$3.60</strong></td>
-                            <td><strong>$10.80</strong></td>
-                            <td><strong>$27.30</strong></td>
+                            <td><strong>$4.20</strong></td>
+                            <td><strong>$12.60</strong></td>
+                            <td><strong>$31.50</strong></td>
                         </tr>
                         <tr>
                             <td data-i18n="slide13_r4c1"><strong>4. 총 비용 (Total OPEX)</strong></td>
-                            <td>($1.68)</td>
-                            <td>($4.04)</td>
-                            <td>($9.40)</td>
+                            <td>($1.80)</td>
+                            <td>($4.50)</td>
+                            <td>($10.85)</td>
                         </tr>
                         <tr style="background-color: #1E293B; border-top: 2px solid #F59E0B;">
                             <td style="font-weight: 700; color: #F59E0B;" data-i18n="slide13_r5c1"><strong>5. EBITDA (영업이익)</strong></td>
-                            <td style="font-weight: 700; color: #F59E0B;"><strong>$1.92</strong></td>
-                            <td style="font-weight: 700; color: #F59E0B;"><strong>$6.76</strong></td>
-                            <td style="font-weight: 700; color: #F59E0B;"><strong>$17.90</strong></td>
+                            <td style="font-weight: 700; color: #F59E0B;"><strong>$2.40</strong></td>
+                            <td style="font-weight: 700; color: #F59E0B;"><strong>$8.10</strong></td>
+                            <td style="font-weight: 700; color: #F59E0B;"><strong>$20.65</strong></td>
                         </tr>
                     </tbody>
                 </table>
@@ -786,7 +872,7 @@
         </div>
     </div>
     
-    <!-- Slide 14: The Ask -->
+    <!-- Slide 14: The Ask (Dynamic Currency) -->
     <div class="slide-container" id="slide14">
         <h2 class="slide-title" data-i18n="slide14_title">투자 요청 (Seed Round): 10억 원 ($770K)</h2>
         <div class="content-area">
@@ -800,40 +886,40 @@
                         <li><span class="legend-dot" style="background-color: #F59E0B;"></span> <strong data-i18n="slide14_l1">핵심 개발 (CAPEX): 5.5억 (55%)</strong></li>
                         <li><span class="legend-dot" style="background-color: #0EA5E9;"></span> <strong data-i18n="slide14_l2">초기 운영/마케팅 (OPEX): 4.5억 (45%)</strong></li>
                     </ul>
-                    <p data-i18n="slide14_p1" style="color: #CBD5E1; font-size: 16px; margin-top: 20px;">* CAPEX: 12개월 개발 인건비 (C#, C++, Flutter, AI 엔지니어)<br>* OPEX: 초기 바이럴 보상 예산, 퍼포먼스 마케팅, 인프라, 법률/회계</p>
+                    <p data-i18n="slide14_p1" style="color: #CBD5E1; font-size: 16px; margin-top: 20px;">* CAPEX: 12개월 개발 인건비 (C#, C++, Flutter, AI 엔지니어)<br>* OPEX: 초기 바이럴/GoldBits™ 보상 예산, 마케팅, 인프라, 법률/회계</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Slide 15: Roadmap -->
+    <!-- Slide 15: Roadmap (UPGRADED) -->
     <div class="slide-container" id="slide15">
-        <h2 class="slide-title" data-i18n="slide15_title">로드맵 (Roadmap)</h2>
+        <h2 class="slide-title" data-i18n="slide15_title">로드맵 (Final Build: 6개월 런칭)</h2>
         <div class="content-area">
             <div class="timeline-layout">
                 <ul class="timeline">
                     <li class="timeline-item">
                         <div class="timeline-content">
-                            <h3 data-i18n="slide15_t1_h3">Phase 1 (1~6개월)</h3>
-                            <p data-i18n="slide15_t1_p">MVP 런칭 (거래/적립/O2O), <strong>IP기반 언어(Th/En) 및 USD/THB 이중 화폐 표시</strong>, AI KYC/챗봇 적용, ✨Gemini 어드바이저 1.0, 바이럴(MLM) 시스템 1.0</p>
+                            <h3 data-i18n="slide15_t1_h3">M1-M2 (0-2개월)</h3>
+                            <p data-i18n="slide15_t1_p">MVP(거래/O2O), <strong>✨AI Novice (SafeStart)</strong>, <strong>✨GoldBits™ Ledger(걷기/퀴즈)</strong>, PromptPay/Bank VA, <strong>✨보험 가격/DB 엔진</strong>, Admin(KYC/Wallet)</p>
                         </div>
                     </li>
                     <li class="timeline-item">
                         <div class="timeline-content">
-                            <h3 data-i18n="slide15_t2_h3">Phase 1 (7~12개월)</h3>
-                            <p data-i18n="slide15_t2_p">AI FDS 1.0 적용, 게이미피케이션 고도화, 월간 손익분기점(BEP) 달성 목표</p>
+                            <h3 data-i18n="slide15_t2_h3">M3-M4 (3-4개월)</h3>
+                            <p data-i18n="slide15_t2_p"><strong>✨구독(Bundles) 카탈로그/빌링</strong>, <strong>✨보험금 청구/Pool Ledger</strong>, <strong>✨Crypto(USDT) Deposits (Beta)</strong>, e-Wallets, AI Advisor+, FDS v1, Growth(Missions) Console</p>
                         </div>
                     </li>
                     <li class="timeline-item">
                         <div class="timeline-content">
-                            <h3 data-i18n="slide15_t3_h3">Phase 2 (13~18개월)</h3>
-                            <p data-i18n="slide15_t3_p">AI 타겟 광고 엔진 고도화 (수익 극대화), (Phase 2) 금 담보 대출 기능 런칭, <strong>다국어(한국어) 지원 확장</strong></p>
+                            <h3 data-i18n="slide15_t3_h3">M5-M6 (5-6개월)</h3>
+                            <p data-i18n="slide15_t3_p"><strong>✨재보험 모듈</strong>, 파트너 포탈, FDS/AML 고도화, PCI/PDPA 규제 준수, GoldBits™ 경제 튜닝</p>
                         </div>
                     </li>
                     <li class="timeline-item">
                         <div class="timeline-content">
-                            <h3 data-i18n="slide15_t4_h3">Phase 2 (19~24개월)</h3>
-                            <p data-i18n="slide15_t4_p">LTV 극대화 및 운영 안정화, 인근 ASEAN 국가(베트남, 인도네시아) 시장성 검토</p>
+                            <h3 data-i18n="slide15_t4_h3">GA (6개월차)</h3>
+                            <p data-i18n="slide15_t4_p">정식 런칭 (Full Payments, Insurance, Bundles, Admin, GoldBits™)</p>
                         </div>
                     </li>
                 </ul>
@@ -841,7 +927,7 @@
         </div>
     </div>
 
-    <!-- Slide 16: Core Team -->
+    <!-- Slide 16: Core Team (Translatable) -->
     <div class="slide-container" id="slide16">
         <h2 class="slide-title" data-i18n="slide16_title">핵심 팀 (Core Team)</h2>
         <div class="content-area">
@@ -914,79 +1000,80 @@
     const translations = {
         'ko': {
             'docTitle': 'ReachGold (리치골드) - 사업 계획서',
+            'slide1_h1': 'ReachGold (리치골드)',
             'slide1_subtitle': 'AI 기반 태국 O2O 금 거래 및 적립 플랫폼',
             'slide1_footer_team': 'Presented by Team VivLeoN',
             'slide1_footer_confidential': 'CONFIDENTIAL - 투자 유치 제안서',
-            'slide1_footer_date': '2025년 11월 7일',
+            'slide1_footer_date': '2025년 11월 12일',
             'slide2_title': 'Executive Summary (요약)',
-            'slide2_p1': '<strong>[ReachGold]</strong>의 미션은 태국 시장에 가장 쉽고, 안전하며, 신뢰할 수 있는 \'실물 연계 O2O 금 거래 및 적립\' 플랫폼을 제공하는 것입니다.',
+            'slide2_p1': '<strong>[ReachGold]</strong>의 미션은 태국 시장에 AI 기반 O2O 금 거래 플랫폼을 제공하는 것입니다. 당사는 **\'AI + 자본 보호 보험\'** 및 **\'AI 초보자 모드\'**를 결합하여 높은 LTV를, **\'GoldBits™ 무료 티어 경제\'** 및 합법적 MLM으로 낮은 CAC를 달성합니다.',
             'slide2_b1_strong': '독점 공급망:',
             'slide2_b1_text': '태국 현지 금광/정제소 파트너십으로 압도적 가격 경쟁력 확보.',
-            'slide2_b2_strong': 'AI 핵심 전략 (AI-Driven):',
-            'slide2_b2_text': 'AI KYC/챗봇으로 OPEX 절감, AI 타겟 광고로 LTV 극대화.',
+            'slide2_b2_strong': 'AI + 보험 (LTV↑):',
+            'slide2_b2_text': 'AI가 리스크를 동적 평가, \'자본 보호(CP)\' 보험 상품을 번들로 제공.',
             'slide2_b3_strong': 'O2O 하이브리드:',
             'slide2_b3_text': '디지털로 간편하게 적립(Online)하고, 원할 때 실물 금으로 인출(Offline).',
-            'slide2_b4_strong': '폭발적 바이럴 성장:',
-            'slide2_b4_text': '합법적 MLM과 \'캐시워크형\' 게이미피케이션으로 CAC 최소화.',
+            'slide2_b4_strong': 'GoldBits™ 경제 (CAC↓):',
+            'slide2_b4_text': '\'무료 체험(걷기/퀴즈)\'으로 유저를 모객(DAU), 유료 구독(LTV)으로 전환.',
             'slide3_title': 'The Problem (시장의 문제점)',
-            'slide3_p1': '태국은 세계적인 금 선호 국가이며 강력한 실물 투자 수요를 보유하고 있습니다. 하지만 개인 투자자들은 여전히 명확한 불편함(Pain Point)을 겪고 있습니다.',
+            'slide3_p1': '태국은 세계적인 금 선호 국가이며 강력한 실물 투자 수요를 보유하고 있습니다. 하지만 개인 투자자들, 특히 **초보자**들은 여전히 명확한 불편함(Pain Point)을 겪고 있습니다.',
             'slide3_b1_strong': '높은 진입 장벽:',
             'slide3_b1_text': '기존 금은방/은행은 수수료가 높고, 소액(1g 미만) 투자가 거의 불가능합니다.',
-            'slide3_b2_strong': '보관 및 보안의 어려움:',
-            'slide3_b2_text': '실물 금을 개인이 보관하는 것은 도난 및 분실의 위험이 큽니다.',
+            'slide3_b2_strong': '변동성 리스크:',
+            'slide3_b2_text': '초보자는 구매 직후의 단기 가격 변동으로 인한 원금 손실(Drawdown)을 극도로 두려워합니다.',
             'slide3_b3_strong': '거래의 불편함:',
             'slide3_b3_text': '금을 사고팔기 위해 매번 오프라인 매장을 방문해야 하는 번거로움이 있습니다.',
             'slide4_title': 'The Solution (우리의 해결책)',
             'slide4_p1': '<strong>[ReachGold]</strong>는 이 모든 문제를 해결하는 원스톱 하이브리드 솔루션입니다.',
-            'slide4_b1_strong': '간편한 소액 적립 (Online):',
-            'slide4_b1_text': '모바일을 통해 1g 미만의 소액(예: 100 THB)으로도 금을 \'적립(GAR)\'할 수 있습니다.',
-            'slide4_b2_strong': '안전한 디지털 보관:',
-            'slide4_b2_text': 'AI FDS가 24시간 자산을 보호하며, 모든 금은 파트너사의 전문 금고에 안전하게 보관됩니다.',
-            'slide4_b3_strong': '자유로운 실물 인출 (Offline):',
-            'slide4_b3_text': '디지털로 모은 금을 언제든 신뢰할 수 있는 파트너(금은방)를 통해 원하는 디자인의 \'실물 금\'으로 직접 인출합니다.',
-            'slide4_b4_strong': '글로벌 UI/UX:',
-            'slide4_b4_text': '플로팅 버튼으로 (Th/En/Ko) 언어 전환, 모든 금액은 현지 화폐(THB)와 USD로 이중 표시.',
-            'slide5_title': '핵심 경쟁력 (Key Differentiators)',
-            'slide5_t1_h3': '독점적 공급망',
-            'slide5_t1_p': '태국 현지 금광/정제소 파트너십. 경쟁력 있는 가격과 안정적인 실물 금 공급.',
-            'slide5_t2_h3': '합법적 바이럴 (MLM)',
-            'slide5_t2_p': '태국 직접판매법 준수. 가입비 X, 실제 거래 기반의 합법적 성과 보상.',
-            'slide5_t3_h3': '게이미피케이션',
-            'slide5_t3_p': '\'캐시워크\' 모델. 걷기/출석/광고 시청으로 소액의 금을 보상. (DAU 확보, 광고 수익)',
-            'slide5_t4_h3': '린(Lean) 아키텍처',
-            'slide5_t4_p': '검증된 중앙화 원장과 AI 보안. 초기 투자 최소화 및 개발 속도 극대화.',
-            'slide6_title': '성장 전략 (Low CAC Strategy)',
-            'slide6_p1': '핵심 경쟁력은 \'합법적 바이럴\'과 \'게이미피케이션\'을 통해 고객 획득 비용(CAC)을 0에 가깝게 수렴시키는 데 있습니다.',
+            'slide4_b1_strong': '✨ AI 초보자 모드 (SafeStart):',
+            'slide4_b1_text': '원클릭 \'안전 시작\' 플로우, 소액(50-500 THB) 주문, AI가 쉬운 언어로 설명.',
+            'slide4_b2_strong': '✨ 자본 보호 보험 (RG-CP):',
+            'slide4_b2_text': '구매 후 T+7일간 단기 변동성 리스크를 커버하는 옵션 제공. (초보자 리스크 해소)',
+            'slide4_b3_strong': '글로벌 UI/UX (i18n):',
+            'slide4_b3_text': '플로팅 버튼으로 (Th/En/Ko) 언어 전환, 모든 금액은 현지 화폐(THB)와 USD로 이중 표시.',
+            'slide4_b4_strong': '자유로운 실물 인출 (Offline):',
+            'slide4_b4_text': '디지털로 모은 금을 언제든 신뢰할 수 있는 파트너(금은방)를 통해 \'실물 금\'으로 직접 인출.',
+            'slide5_title': '✨ 4대 핵심 제품 기둥',
+            'slide5_t1_h3': 'Trade & Save (거래/적립)',
+            'slide5_t1_p': '그램(g) 또는 바트(THB) 단위로 간편하게 금을 거래/적립. (USD/THB 이중 가격 표시)',
+            'slide5_t2_h3': 'Insurance Suite (보험)',
+            'slide5_t2_p': 'RG-CP(자본 보호), RG-CU(보관 손실) 등 AI 기반 동적 보험료 상품. (부가 수익 창출)',
+            'slide5_t3_h3': 'Bundles (구독)',
+            'slide5_t3_p': 'Basic/Plus/Max 등급의 MRR(월간 반복 수익) 모델. (수수료 할인, 보험 할인, AI 어드바이저 결합)',
+            'slide5_t4_h3': 'GoldBits™ (M2E 무료 티어)',
+            'slide5_t4_p': '걷기/퀴즈/광고로 GoldBits™(포인트) 획득. 수수료/보험료 쿠폰으로 교환. (CAC↓, LTV 전환 퍼널)',
+            'slide6_title': '성장 전략 (Low CAC)',
+            'slide6_p1': 'CAC(고객 획득 비용)를 0에 가깝게 수렴시키는 \'합법적 바이럴\'과 \'GoldBits™ 경제\'가 핵심입니다.',
             'slide6_b1_strong': 'MLM 바이럴 엔진:',
-            'slide6_b1_text': '실제 금 거래 수수료의 일부를 추천인(N단계)에게 보상. (불법 피라미드 X)',
-            'slide6_b2_strong': '\'캐시워크\' 모델:',
-            'slide6_b2_text': '걷기/광고 시청으로 금 보상. (1) 광고 수익 창출, (2) DAU 확보, (3) 비투자 고객의 입금 전환 퍼널.',
+            'slide6_b1_text': '추천인(N단계)에게 실제 거래 수수료의 %를 보상. (불법 피라미드 아님)',
+            'slide6_b2_strong': '✨ GoldBits™ 경제 (M2E):',
+            'slide6_b2_text': '걷기/퀴즈/광고로 GoldBits™(포인트) 획득. 수수료/보험료 쿠폰으로 교환(현금X). (1) 광고 수익, (2) DAU 확보, (3) 유료 구독 전환.',
             'slide6_b3_strong': '소셜 락인 (Lock-in):',
             'slide6_b3_text': '금 선물하기, VIP 등급제, 커뮤니티 랭킹을 통해 지속적인 참여 유도.',
             'slide7_title': '수익 모델 (Monetization)',
-            'slide7_l1': 'AI 타겟 광고 (40%)',
-            'slide7_l2': '거래/적립 수수료 (35%)',
-            'slide7_l3': 'O2O 실물 인출 (15%)',
-            'slide7_l4': '(Phase 2) 금 담보 대출 (10%)',
-            'slide7_p1': '* AI 타겟 광고는 \'캐시워크형\' 리워드 시스템과 연동되어<br>거래 수수료에 버금가는 핵심 수익원이 될 것입니다.',
+            'slide7_l1': '✨ 구독/번들 수익 (MRR) (40%)',
+            'slide7_l2': '거래/적립 수수료 (30%)',
+            'slide7_l3': '✨ 보험 & 부가상품 (20%)',
+            'slide7_l4': 'AI 광고 (GoldBits™ 연동) (10%)',
+            'slide7_p1': '* AI 광고(무료 티어)로 유입된 사용자를<br>고마진 **구독(유료 티어) 모델**로 전환시켜 LTV 극대화.',
             'slide8_title': '핵심 성공 가정 (ARPU)',
             'slide8_t1_h3': '전체 MAU (100%)',
-            'slide8_t1_p': '바이럴(MLM) 및 게이미피케이션으로 3차년도 70만 달성 목표.',
-            'slide8_t2_h3': '입금 사용자 (20% of MAU)',
-            'slide8_t2_p': '월 $10 ARPU (거래 수수료, O2O 수수료)',
-            'slide8_t3_h3': '비입금 사용자 (80% of MAU)',
-            'slide8_t3_p': '월 $1.25 ARPU (AI 타겟 광고 수익)',
+            'slide8_t1_p': '바이럴(MLM) 및 GoldBits™(M2E)로 3차년도 70만 달성 목표.',
+            'slide8_t2_h3': '✨ 유료 티어 (Paid Tiers) (25%)',
+            'slide8_t2_p': '월 $12 ARPU (구독료 MRR, 거래/보험 수수료 할인 적용)',
+            'slide8_t3_h3': '✨ 무료 티어 (Free Tier) (75%)',
+            'slide8_t3_p': '월 $0.67 ARPU (AI 타겟 광고 수익 - GoldBits™ 연동)',
             'slide8_t4_h3': 'Blended ARPU (전체 기준)',
-            'slide8_t4_p': '($10 * 20%) + ($1.25 * 80%) = <strong>월 $3.00</strong><br>(Phase 2 대출 수익 추가 시 $3.25)',
+            'slide8_t4_p': '($12 * 25%) + ($0.67 * 75%) = <strong>월 $3.50</strong><br>(기존 $3.00 모델 대비 ARPU 및 LTV 16% 상향)',
             'slide9_title': 'AI 4대 핵심 전략 (Powered by Gemini)',
             'slide9_t1_h3': '✨ AI 기반 FDS & AML',
-            'slide9_t1_p': 'Gemini가 실시간 거래/텍스트 패턴을 분석하여 자금 세탁, 어뷰징 링을 사전에 탐지 및 차단합니다.',
-            'slide9_t2_h3': '✨ AI 챗봇 2.0 (자산 컨시어지)',
-            'slide9_t2_p': '단순 응대를 넘어, 복잡한 자산/MLM 성과 문의를 이해하고 응답하는 Gemini 기반 24/7 AI 비서.',
-            'slide9_t3_h3': '✨ AI 동적 광고 엔진 (Gemini)',
-            'slide9_t3_p': '사용자 행동에 맞춰 Gemini가 실시간으로 \'초개인화\' 광고 카피를 생성, eCPM 및 LTV를 극대화합니다.',
-            'slide9_t4_h3': '✨ AI 개인화 어드바이저 (Gemini)',
-            'slide9_t4_p': '사용자 목표(예: "결혼자금 100g")를 학습, 맞춤형 푸시/리포트를 제공하고 TTS 음성으로 브리핑합니다.',
+            'slide9_t1_p': 'Gemini가 실시간 거래/텍스트 패턴을 분석하여 자금 세탁, 어뷰징 링을 사전에 탐지 및 차단합니다. (리스크 관리)',
+            'slide9_t2_h3': '✨ AI 보험 동적 가격 책정',
+            'slide9_t2_p': 'Gemini가 사용자 리스크 등급(A-E)과 시장 변동성(σ)을 분석하여 RG-CP 보험료를 실시간으로 책정합니다. (수익 극대화)',
+            'slide9_t3_h3': '✨ AI 동적 광고 (GoldBits™)',
+            'slide9_t3_p': 'Gemini가 \'걷기 보상\'을 \'보험료 할인 쿠폰\' 등과 연결하는 초개인화 광고를 생성, eCPM 및 유료 전환율을 극대화합니다.',
+            'slide9_t4_h3': '✨ AI 개인화 어드바이저 (HISO)',
+            'slide9_t4_p': '사용자 목표(예: "결혼자금 100g")를 학습, 맞춤형 푸시/리포트를 제공하고 프리미엄 TTS 음성으로 브리핑합니다.',
             'slide10_title': 'Gemini API: ReachGold의 핵심 두뇌',
             'slide10_t1_h3': '✨ AI 어드바이저 (TTS & Search)',
             'slide10_t1_p': 'Gemini가 Google Search로 실시간 금 시황을 요약하고, 프리미엄 TTS 음성으로 \'일일 자산 브리핑\'을 제공하여 HISO 경험을 선사합니다.',
@@ -994,30 +1081,32 @@
             'slide10_t2_p': 'Gemini의 멀티턴 대화 처리로, "내 3단계 추천인 중 실적이 가장 좋은 사람은?" 같은 복잡한 질문에도 즉각 응답하여 OPEX를 절감합니다.',
             'slide10_t3_h3': '✨ AI 동적 광고 카피 (Gen-Text)',
             'slide10_t3_p': 'Gemini가 \'걷기 보상\'을 \'금 적립\'과 연결하는 개인화 광고 카피를 실시간 생성하여 광고 수익(LTV)을 극대화합니다.',
+            'slide10_t4_h3': '✨ AI 보험 언더라이팅 (RAG)',
+            'slide10_t4_p': 'Gemini (RAG)가 보험금 청구 시 FDS 데이터와 약관을 교차 검증하여, 자동 승인/거부/검토(Underwriter)로 분류합니다.',
             'slide11_title': '법률 및 리스크 관리 (Risk Management)',
             'slide11_b1_strong': '[최우선] MLM 법률 리스크 해소:',
             'slide11_b1_text': '태국 \'직접판매법(B.E. 2545)\' 준수. (1) 가입비가 없고 (2) 보상이 \'실제 금 거래\' 수수료에 기반하므로 \'합법적 MLM\' 범주에 해당 (현지 로펌 검토 완료).',
             'slide11_b2_strong': 'KYC/AML (자금세탁방지):',
-            'slide11_b2_text': 'AI FDS와 NDID(태국 디지털 ID) 연동을 통해 현지 규정을 준수하는 강력한 신원 확인 및 자금세탁방지 체계를 구축합니다.',
-            'slide11_b3_strong': '시세 변동 리스크:',
-            'slide11_b3_text': '플랫폼이 보유한 금 재고(Inventory)에 대해서는 전문 헤징(Hedging) 전략을 통해 시세 변동 리스크를 최소화합니다.',
+            'slide11_b2_text': 'AI FDS와 NDID(태국 디지털 ID) 및 Crypto Travel Rule(VASP 파트너) 연동으로 강력한 AML 체계 구축.',
+            'slide11_b3_strong': '✨ 보험 풀 지급여력 (Solvency):',
+            'slide11_b3_text': '보험 리스크 풀의 지급여력비율(>130%)을 실시간 모니터링. 손실율(LR) 급증 시 AI가 자동으로 보험료를 인상(S1)하거나 재보험(S3)을 실행.',
             'slide12_title': '기술: 린(Lean) & 신뢰 아키텍처',
-            'slide12_p1': '<strong>핵심:</strong> 블록체인의 복잡성 대신, 검증된 <strong>\'중앙화 디지털 원장(PostgreSQL)\'</strong>과 암호화된 \'불변 감사 로그\'로 금융권 수준의 신뢰와 효율성을 확보합니다.',
+            'slide12_p1': '<strong>핵심:</strong> 검증된 <strong>\'중앙화 디지털 원장(PostgreSQL)\'</strong>과 암호화된 \'불변 감사 로그\'로 금융권 수준의 신뢰와 효율성을 확보합니다. (블록체인 복잡성 제거)',
             'slide12_th1': '분류',
             'slide12_th2': '기술 스택',
             'slide12_th3': '선정 사유',
             'slide12_r1c1': 'Frontend',
             'slide12_r1c3': '단일 코드베이스(iOS/Android/Web), <strong>IP기반/플로팅 버튼 다국어(Ko/En/Th) 지원</strong>, 빠른 TTM',
             'slide12_r2c1': 'Backend',
-            'slide12_r2c3': '검증된 MSA 성능, 실시간 시세/체결, <strong>USD/현지통화 환율 엔진</strong>',
+            'slide12_r2c3': '검증된 MSA 성능, 실시간 시세/체결, <strong>USD/현지통화 환율 엔진</strong>, 보험/구독 로직',
             'slide12_r3c1': 'Database',
-            'slide12_r3c3': '금융 원장(ACID 보장) 및 실시간 시세/랭킹 캐싱',
+            'slide12_r3c3': '금융/보험 원장(ACID 보장) 및 실시간 시세/랭킹 캐싱',
             'slide12_r4c1': 'AI / ML',
-            'slide12_r4c3': 'FDS, KYC, 챗봇, 타겟 광고 등 AI 엔진 개발 및 API 서빙',
-            'slide12_r5c1': 'Cloud Infra',
-            'slide12_r5c3': '컨테이너 기반의 안정적인 MSA 배포 및 자동 스케일링',
+            'slide12_r4c3': 'FDS, KYC, 챗봇, 동적 가격책정, 광고, 언더라이팅(RAG) 엔진',
+            'slide12_r5c1': 'Payments',
+            'slide12_r5c3': 'Card, QR(PromptPay), Bank, e-Wallet, <strong>Crypto(USDT)</strong> 등 모든 결제 수단 통합/라우팅',
             'slide13_title': '3개년 재무 추정 (Pro-Forma P&L)',
-            'slide13_p1': '* (단위: 억 원, $M) | (면책 조항: 상기 추정은 핵심 가정에 기반한 예측치이며 실제와 다를 수 있습니다.)',
+            'slide13_p1': '* (단위: 백만 달러, $M) | (면책 조항: 상기 추정은 핵심 가정에 기반한 예측치이며 실제와 다를 수 있습니다.)',
             'slide13_th1': '항목',
             'slide13_th2': 'Year 1 (런칭)',
             'slide13_th3': 'Year 2 (성장)',
@@ -1030,16 +1119,16 @@
             'slide14_title': `투자 요청 (Seed Round): ${formatKr(baseAmounts.seedAskKRW)} (${formatUsd(baseAmounts.seedAskUSD)})`,
             'slide14_l1': `핵심 개발 (CAPEX): ${formatKr(baseAmounts.capexKRW)} (55%)`,
             'slide14_l2': `초기 운영/마케팅 (OPEX): ${formatKr(baseAmounts.opexKRW)} (45%)`,
-            'slide14_p1': '* CAPEX: 12개월 개발 인건비 (C#, C++, Flutter, AI 엔지니어)<br>* OPEX: 초기 바이럴 보상 예산, 퍼포먼스 마케팅, 인프라, 법률/회계',
-            'slide15_title': '로드맵 (Roadmap)',
-            'slide15_t1_h3': 'Phase 1 (1~6개월)',
-            'slide15_t1_p': 'MVP 런칭 (거래/적립/O2O), <strong>IP기반 언어(Th/En) 및 USD/THB 이중 화폐 표시</strong>, AI KYC/챗봇 적용, ✨Gemini 어드바이저 1.0, 바이럴(MLM) 시스템 1.0',
-            'slide15_t2_h3': 'Phase 1 (7~12개월)',
-            'slide15_t2_p': 'AI FDS 1.0 적용, 게이미피케이션 고도화, 월간 손익분기점(BEP) 달성 목표',
-            'slide15_t3_h3': 'Phase 2 (13~18개월)',
-            'slide15_t3_p': 'AI 타겟 광고 엔진 고도화 (수익 극대화), (Phase 2) 금 담보 대출 기능 런칭, <strong>다국어(한국어) 지원 확장</strong>',
-            'slide15_t4_h3': 'Phase 2 (19~24개월)',
-            'slide15_t4_p': 'LTV 극대화 및 운영 안정화, 인근 ASEAN 국가(베트남, 인도네시아) 시장성 검토',
+            'slide14_p1': '* CAPEX: 12개월 개발 인건비 (C#, C++, Flutter, AI 엔지니어)<br>* OPEX: 초기 바이럴/GoldBits™ 보상 예산, 마케팅, 인프라, 법률/회계',
+            'slide15_title': '로드맵 (Final Build: 6개월 런칭)',
+            'slide15_t1_h3': 'M1-M2 (0-2개월)',
+            'slide15_t1_p': 'MVP(거래/O2O), <strong>✨AI Novice (SafeStart)</strong>, <strong>✨GoldBits™ Ledger(걷기/퀴즈)</strong>, PromptPay/Bank VA, <strong>✨보험 가격/DB 엔진</strong>, Admin(KYC/Wallet)',
+            'slide15_t2_h3': 'M3-M4 (3-4개월)',
+            'slide15_t2_p': '<strong>✨구독(Bundles) 카탈로그/빌링</strong>, <strong>✨보험금 청구/Pool Ledger</strong>, <strong>✨Crypto(USDT) Deposits (Beta)</strong>, e-Wallets, AI Advisor+, FDS v1, Growth(Missions) Console',
+            'slide15_t3_h3': 'M5-M6 (5-6개월)',
+            'slide15_t3_p': '<strong>✨재보험 모듈</strong>, 파트너 포탈, FDS/AML 고도화, PCI/PDPA 규제 준수, GoldBits™ 경제 튜닝',
+            'slide15_t4_h3': 'GA (6개월차)',
+            'slide15_t4_p': '정식 런칭 (Full Payments, Insurance, Bundles, Admin, GoldBits™)',
             'slide16_title': '핵심 팀 (Core Team)',
             'slide16_t1_h3': '[설립자/CEO]',
             'slide16_t1_h4': '(TBD)',
@@ -1058,78 +1147,79 @@
         },
         'en': {
             'docTitle': 'ReachGold - Business Proposal',
+            'slide1_h1': 'ReachGold',
             'slide1_subtitle': 'AI-Powered O2O Gold Trading & Savings Platform for Thailand',
             'slide1_footer_team': 'Presented by Team VivLeoN',
             'slide1_footer_confidential': 'CONFIDENTIAL - Pitch Deck',
-            'slide1_footer_date': 'November 7, 2025',
+            'slide1_footer_date': 'November 12, 2025',
             'slide2_title': 'Executive Summary',
-            'slide2_p1': '<strong>[ReachGold]</strong>\'s mission is to provide the easiest, safest, and most trusted \'Physical-Linked O2O Gold Trading & Savings\' platform in the Thai market.',
+            'slide2_p1': '<strong>[ReachGold]</strong>\'s mission is to provide an AI-powered O2O gold platform in Thailand. We achieve high LTV by combining **\'AI + Capital Protection Insurance\'** and an **\'AI Novice Mode\'**, and low CAC through a **\'GoldBits™ Free Tier Economy\'** and legal MLM.',
             'slide2_b1_strong': 'Exclusive Supply Chain:',
             'slide2_b1_text': 'Secured partnerships with local Thai mines/refineries for overwhelming price competitiveness.',
-            'slide2_b2_strong': 'AI-Driven Core:',
-            'slide2_b2_text': 'Utilize AI KYC/Chatbot to reduce OPEX and an AI Target-Ad engine to maximize LTV.',
+            'slide2_b2_strong': 'AI + Insurance (LTV↑):',
+            'slide2_b2_text': 'AI dynamically assesses risk and bundles \'Capital Protection (CP)\' insurance products.',
             'slide2_b3_strong': 'O2O Hybrid:',
             'slide2_b3_text': 'Conveniently save digitally (Online), and withdraw as physical gold anytime (Offline).',
-            'slide2_b4_strong': 'Explosive Viral Growth:',
-            'slide2_b4_text': 'Achieve minimal CAC through a legal MLM model and \'CashWalk-style\' gamification.',
+            'slide2_b4_strong': 'GoldBits™ Economy (CAC↓):',
+            'slide2_b4_text': 'Acquire users (DAU) with \'Free-to-Earn (walking/quizzes)\' and convert them to paid subscriptions (LTV).',
             'slide3_title': 'The Problem',
-            'slide3_p1': 'Thailand is a top gold-loving nation with strong demand for physical investment. However, individual investors still face clear pain points:',
+            'slide3_p1': 'Thailand is a top gold-loving nation with strong demand for physical investment. However, individual investors, especially **novices**, still face clear pain points:',
             'slide3_b1_strong': 'High Barrier to Entry:',
             'slide3_b1_text': 'Traditional shops/banks have high fees, and micro-investment (<1g) is nearly impossible.',
-            'slide3_b2_strong': 'Difficulty in Storage & Security:',
-            'slide3_b2_text': 'Storing physical gold personally carries high risks of theft and loss.',
+            'slide3_b2_strong': 'Volatility Risk:',
+            'slide3_b2_text': 'Novices fear principal loss (Drawdown) from short-term price volatility immediately after purchase.',
             'slide3_b3_strong': 'Inconvenient Transactions:',
             'slide3_b3_text': 'The hassle of visiting offline stores for every purchase or sale.',
             'slide4_title': 'The Solution',
             'slide4_p1': '<strong>[ReachGold]</strong> is the one-stop hybrid solution that solves all these problems.',
-            'slide4_b1_strong': 'Easy Micro-Savings (Online):',
-            'slide4_b1_text': 'Save gold in micro-amounts (e.g., 100 THB) via our cross-platform app.',
-            'slide4_b2_strong': 'Secure Digital Vault:',
-            'slide4_b2_text': 'AI FDS protects assets 24/7, with all gold securely stored in partner vaults.',
-            'slide4_b3_strong': 'Flexible Physical Redemption (Offline):',
-            'slide4_b3_text': 'Redeem digitally saved gold as physical gold products directly from trusted partners.',
-            'slide4_b4_strong': 'Global UI/UX:',
-            'slide4_b4_text': 'Floating button for language switching (Th/En/Ko), with all values dual-displayed in local currency (THB) and USD.',
-            'slide5_title': 'Key Differentiators',
-            'slide5_t1_h3': 'Exclusive Supply Chain',
-            'slide5_t1_p': 'Partnerships with local mines/refineries. Competitive pricing and stable physical supply.',
-            'slide5_t2_h3': 'Legal Viral (MLM)',
-            'slide5_t2_p': 'Compliant with Thai Direct Sales Act. No sign-up fees, rewards based on actual transactions.',
-            'slide5_t3_h3': 'Gamification',
-            'slide5_t3_p': '\'CashWalk\' model. Reward gold for walking/ads. (Secures DAU, generates ad revenue).',
-            'slide5_t4_h3': 'Lean Architecture',
-            'slide5_t4_p': 'Proven centralized ledger & AI security. Minimizes initial CAPEX and maximizes TTM.',
+            'slide4_b1_strong': '✨ AI Novice Mode (SafeStart):',
+            'slide4_b1_text': 'One-click "SafeStart" flow, micro-orders (50-500 THB), with AI-driven plain-language explanations.',
+            'slide4_b2_strong': '✨ Capital Protection (RG-CP):',
+            'slide4_b2_text': 'Optional insurance covering short-term volatility risk (T+7 days) to eliminate novice anxiety.',
+            'slide4_b3_strong': 'Global UI/UX (i18n):',
+            'slide4_b3_text': 'Floating button for language switching (Th/En/Ko), with all values dual-displayed in local currency (THB) and USD.',
+            'slide4_b4_strong': 'Flexible Physical Redemption (Offline):',
+            'slide4_b4_text': 'Redeem digitally saved gold as physical gold products directly from trusted partners.',
+            'slide5_title': '✨ 4 Core Product Pillars',
+            'slide5_t1_h3': 'Trade & Save',
+            'slide5_t1_p': 'Easily trade/save gold by gram (g) or Baht (THB). (Dual USD/THB pricing)',
+            'slide5_t2_h3': 'Insurance Suite',
+            'slide5_t2_p': 'AI-powered dynamic premium products like RG-CP (Capital Protection) and RG-CU (Custody Loss). (Generates add-on revenue)',
+            'slide5_t3_h3': 'Bundles (Subscriptions)',
+            'slide5_t3_p': 'Basic/Plus/Max tiered MRR model. (Combines fee discounts, insurance discounts, and AI Advisor features)',
+            'slide5_t4_h3': 'GoldBits™ (M2E Free Tier)',
+            'slide5_t4_p': 'Earn GoldBits™ (points) via walking/quizzes/ads. Redeem for fee/insurance coupons. (CAC↓, LTV Conversion Funnel)',
             'slide6_title': 'Growth Strategy (Low CAC)',
-            'slide6_p1': 'Our core advantage is reducing Customer Acquisition Cost (CAC) to near-zero through legal virality and gamification.',
+            'slide6_p1': 'Our core is the \'GoldBits™ Economy\' and \'Legal Virality\' that drive Customer Acquisition Cost (CAC) to near-zero.',
             'slide6_b1_strong': 'MLM Viral Engine:',
-            'slide6_b1_text': 'Reward referrers (N-level) with a % of transaction fees. (Not an illegal pyramid scheme).',
-            'slide6_b2_strong': '\'CashWalk\' Model:',
-            'slide6_b2_text': 'Reward gold for walking/ads. (1) Generates ad revenue, (2) Secures DAU, (3) Converts non-paying users.',
+            'slide6_b1_text': 'Reward referrers (N-level) with a % of actual transaction fees. (Not an illegal pyramid scheme).',
+            'slide6_b2_strong': '✨ GoldBits™ Economy (M2E):',
+            'slide6_b2_text': 'Earn \'GoldBits™\' (points) from walking/quizzes/ads. Redeemable for fee/insurance coupons only (no cash). (1) Generates ad revenue, (2) Secures DAU, (3) Converts non-paying users.',
             'slide6_b3_strong': 'Social Lock-in:',
             'slide6_b3_text': 'Features like "Gift Gold," VIP Tiers, and community rankings drive engagement.',
             'slide7_title': 'Business Model (Monetization)',
-            'slide7_l1': 'AI Target-Ads (40%)',
-            'slide7_l2': 'Transaction/Saving Fees (35%)',
-            'slide7_l3': 'O2O Physical Redemption (15%)',
-            'slide7_l4': '(Phase 2) Gold-backed Loans (10%)',
-            'slide7_p1': '* AI Target-Ads, linked with the rewards system,<br>will become a core revenue stream, rivaling transaction fees.',
+            'slide7_l1': '✨ Subscription/Bundles (MRR) (40%)',
+            'slide7_l2': 'Transaction/Saving Fees (30%)',
+            'slide7_l3': '✨ Insurance & Add-ons (20%)',
+            'slide7_l4': 'AI Ads (via GoldBits™) (10%)',
+            'slide7_p1': '* Users acquired via AI Ads (Free Tier) are converted<br>to the high-margin **Subscription (Paid Tier) Model** to maximize LTV.',
             'slide8_title': 'Key Assumptions (ARPU)',
             'slide8_t1_h3': 'Total MAU (100%)',
-            'slide8_t1_p': 'Targeting 700k MAU in Year 3 via viral(MLM) & gamification.',
-            'slide8_t2_h3': 'Depositing Users (20% of MAU)',
-            'slide8_t2_p': '$10 Monthly ARPU (Transaction fees, O2O fees)',
-            'slide8_t3_h3': 'Non-Depositing Users (80% of MAU)',
-            'slide8_t3_p': '$1.25 Monthly ARPU (AI Target-Ad revenue)',
+            'slide8_t1_p': 'Targeting 700k MAU in Year 3 via viral(MLM) & GoldBits™(M2E).',
+            'slide8_t2_h3': '✨ Paid Tiers (25% of MAU)',
+            'slide8_t2_p': '$12 Monthly ARPU (Subscription MRR, discounted trade/insurance fees)',
+            'slide8_t3_h3': '✨ Free Tier (75% of MAU)',
+            'slide8_t3_p': '$0.67 Monthly ARPU (AI Target-Ad revenue - GoldBits™)',
             'slide8_t4_h3': 'Blended ARPU (Total MAU)',
-            'slide8_t4_p': '($10 * 20%) + ($1.25 * 80%) = <strong>$3.00/month</strong><br>(Rises to $3.25 with Phase 2 Lending)',
+            'slide8_t4_p': '($12 * 25%) + ($0.67 * 75%) = <strong>$3.50/month</strong><br>(16% ARPU & LTV uplift vs. $3.00 model)',
             'slide9_title': 'AI Core Strategy (Powered by Gemini)',
             'slide9_t1_h3': '✨ AI-Driven FDS & AML',
-            'slide9_t1_p': 'Gemini analyzes real-time transaction/text patterns to detect and block money laundering and abuse rings.',
-            'slide9_t2_h3': '✨ AI Chatbot 2.0 (Asset Concierge)',
-            'slide9_t2_p': 'A 24/7 AI assistant, powered by Gemini, that understands complex asset/MLM queries, reducing OPEX.',
-            'slide9_t3_h3': '✨ AI Dynamic Ad Engine (Gemini)',
-            'slide9_t3_p': 'Gemini generates hyper-personalized ad copy in real-time based on user behavior, maximizing eCPM and LTV.',
-            'slide9_t4_h3': '✨ AI Personal Advisor (Gemini)',
+            'slide9_t1_p': 'Gemini analyzes real-time transaction/text patterns to detect and block money laundering and abuse rings. (Risk Mgmt)',
+            'slide9_t2_h3': '✨ AI Dynamic Insurance Pricing',
+            'slide9_t2_p': 'Gemini analyzes user risk tiers (A-E) and market volatility (σ) to set real-time RG-CP premiums. (Revenue Max)',
+            'slide9_t3_h3': '✨ AI Dynamic Ads (GoldBits™)',
+            'slide9_t3_p': 'Gemini generates hyper-personalized ads linking \'walking rewards\' to \'insurance coupons\', maximizing eCPM & paid conversion.',
+            'slide9_t4_h3': '✨ AI Personal Advisor (HISO)',
             'slide9_t4_p': 'Learns user goals (e.g., "Save 100g for wedding"), provides custom reports, and briefs via premium TTS.',
             'slide10_title': 'Gemini API: The Brain of ReachGold',
             'slide10_t1_h3': '✨ AI Advisor (TTS & Search)',
@@ -1138,13 +1228,15 @@
             'slide10_t2_p': 'With Gemini\'s multi-turn logic, it answers complex queries like, "Who is my best-performing 3rd-level referral?" instantly.',
             'slide10_t3_h3': '✨ AI Dynamic Ad Copy (Gen-Text)',
             'slide10_t3_p': 'Gemini generates personalized ad copy linking \'walking rewards\' to \'gold savings\' in real-time, maximizing ad revenue (LTV).',
+            'slide10_t4_h3': '✨ AI Insurance Underwriting (RAG)',
+            'slide10_t4_p': 'Gemini (RAG) cross-references claim details with FDS data and policy terms to auto-approve, deny, or flag for human review.',
             'slide11_title': 'Legal & Risk Management',
             'slide11_b1_strong': '[Top Priority] MLM Legal Risk:',
             'slide11_b1_text': 'Compliant with Thai Direct Sales Act (B.E. 2545). (1) No sign-up fee, (2) Rewards based on actual transaction fees = \'Legal MLM\' (Confirmed by local law firm).',
             'slide11_b2_strong': 'KYC/AML:',
-            'slide11_b2_text': 'Robust identity verification and AML system via AI FDS and integration with NDID (Thai Digital ID).',
-            'slide11_b3_strong': 'Price Fluctuation Risk:',
-            'slide11_b3_text': 'Gold inventory held by the platform will be minimized and managed via professional hedging strategies.',
+            'slide11_b2_text': 'Robust AML system via AI FDS, NDID (Thai Digital ID), and Crypto Travel Rule (VASP partner) integration.',
+            'slide11_b3_strong': '✨ Insurance Pool Solvency:',
+            'slide11_b3_text': 'Real-time monitoring of the insurance pool solvency ratio (>130%). AI auto-triggers premium hikes (S1) or reinsurance (S3) if Loss Ratio (LR) spikes.',
             'slide12_title': 'Tech: Lean & Trust Architecture',
             'slide12_p1': '<strong>Core:</strong> Instead of blockchain complexity, we ensure bank-grade trust and efficiency via a proven <strong>\'Centralized Digital Ledger (PostgreSQL)\'</strong> and encrypted \'Immutable Audit Logs\'.',
             'slide12_th1': 'Category',
@@ -1153,13 +1245,13 @@
             'slide12_r1c1': 'Frontend',
             'slide12_r1c3': 'Single codebase (iOS/Android/Web), <strong>IP-based/Floating Button i18n (Ko/En/Th)</strong>, fast TTM.',
             'slide12_r2c1': 'Backend',
-            'slide12_r2c3': 'Proven MSA performance, real-time pricing engine, <strong>USD/Local currency FX engine</strong>.',
+            'slide12_r2c3': 'Proven MSA performance, real-time pricing, <strong>USD/Local FX engine</strong>, Insurance/Subscription logic.',
             'slide12_r3c1': 'Database',
-            'slide12_r3c3': 'Financial ledger (ACID) & real-time price/ranking cache.',
+            'slide12_r3c3': 'Financial/Insurance ledger (ACID) & real-time price/ranking cache.',
             'slide12_r4c1': 'AI / ML',
-            'slide12_r4c3': 'FDS, KYC, Chatbot, Ad-Targeting engines & API serving.',
-            'slide12_r5c1': 'Cloud Infra',
-            'slide12_r5c3': 'Container-based stable deployment & auto-scaling.',
+            'slide12_r4c3': 'FDS, KYC, Chatbot, Dynamic Pricing, Ads, Underwriting (RAG) engines.',
+            'slide12_r5c1': 'Payments',
+            'slide12_r5c3': 'Card, QR(PromptPay), Bank, e-Wallet, <strong>Crypto(USDT)</strong> unified via Orchestrator.',
             'slide13_title': '3-Year Financials (Pro-Forma P&L)',
             'slide13_p1': '* (Unit: $M USD) | (Disclaimer: These projections are based on key assumptions and may differ from actual results.)',
             'slide13_th1': 'Item',
@@ -1174,16 +1266,16 @@
             'slide14_title': `The Ask (Seed Round): ${formatUsd(baseAmounts.seedAskUSD)} (₩${formatKr(baseAmounts.seedAskKRW, true)})`,
             'slide14_l1': `Core Development (CAPEX): ${formatUsd(baseAmounts.capexUSD)} (55%)`,
             'slide14_l2': `Initial Ops/Marketing (OPEX): ${formatUsd(baseAmounts.opexUSD)} (45%)`,
-            'slide14_p1': '* CAPEX: 12 months dev salaries (C#, C++, Flutter, AI)<br>* OPEX: Initial viral reward budget, performance marketing, infra, G&A',
-            'slide15_title': 'Roadmap',
-            'slide15_t1_h3': 'Phase 1 (Months 1-6)',
-            'slide15_t1_p': 'MVP Launch (Trade/Save/O2O), <strong>IP-based Lang (Th/En) & USD/THB dual currency</strong>, AI KYC/Chatbot, ✨Gemini Advisor 1.0, Viral (MLM) System 1.0',
-            'slide15_t2_h3': 'Phase 1 (Months 7-12)',
-            'slide15_t2_p': 'AI FDS 1.0 launch, Gamification enhancement, Target monthly BEP',
-            'slide15_t3_h3': 'Phase 2 (Months 13-18)',
-            'slide15_t3_p': 'AI Target-Ad engine scale-up (Revenue max), (Phase 2) Gold-backed lending launch, <strong>i18n (Korean) support expansion</strong>',
-            'slide15_t4_h3': 'Phase 2 (Months 19-24)',
-            'slide15_t4_p': 'LTV optimization & ops stabilization, ASEAN market research (Vietnam, Indonesia)',
+            'slide14_p1': '* CAPEX: 12 months dev salaries (C#, C++, Flutter, AI)<br>* OPEX: Initial viral/GoldBits™ reward budget, marketing, infra, G&A',
+            'slide15_title': 'Roadmap (Final Build: 6-Month GA)',
+            'slide15_t1_h3': 'M1-M2 (Months 0-2)',
+            'slide15_t1_p': 'MVP (Trade/O2O), <strong>✨AI Novice (SafeStart)</strong>, <strong>✨GoldBits™ Ledger (Walk/Quiz)</strong>, PromptPay/Bank VA, <strong>✨Insurance Pricing/DB Engine</strong>, Admin(KYC/Wallet)',
+            'slide15_t2_h3': 'M3-M4 (Months 3-4)',
+            'slide15_t2_p': '<strong>✨Subscription (Bundles) Catalog/Billing</strong>, <strong>✨Insurance Claims/Pool Ledger</strong>, <strong>✨Crypto(USDT) Deposits (Beta)</strong>, e-Wallets, AI Advisor+, FDS v1, Growth(Missions) Console',
+            'slide15_t3_h3': 'M5-M6 (Months 5-6)',
+            'slide15_t3_p': '<strong>✨Reinsurance Module</strong>, Partner Portal, Advanced FDS/AML, PCI/PDPA Compliance, GoldBits™ Economy Tuning',
+            'slide15_t4_h3': 'GA (Month 6)',
+            'slide15_t4_p': 'General Availability (Full Payments, Insurance, Bundles, Admin, GoldBits™)',
             'slide16_title': 'Core Team',
             'slide16_t1_h3': '[Founder/CEO]',
             'slide16_t1_h4': '(TBD)',
@@ -1200,110 +1292,113 @@
             'slide17_h2': 'Q&A',
             'slide17_p1': 'Thank You.',
         },
-        'th': { // (Note: Using English/Korean placeholders for Thai as a demo)
+        'th': {
             'docTitle': 'ReachGold - แผนธุรกิจ',
-            'slide1_subtitle': 'แพลตฟอร์มเทรดและออมทอง O2O 기반 AI สำหรับประเทศไทย',
+            'slide1_h1': 'ReachGold (รีชโกลด์)',
+            'slide1_subtitle': 'แพลตฟอร์มเทรดและออมทอง O2O ที่ขับเคลื่อนด้วย AI สำหรับประเทศไทย',
             'slide1_footer_team': 'นำเสนอโดย Team VivLeoN',
             'slide1_footer_confidential': 'เป็นความลับ - เอกสารเสนอการลงทุน',
-            'slide1_footer_date': '7 พฤศจิกายน 2025',
+            'slide1_footer_date': '12 พฤศจิกายน 2025',
             'slide2_title': 'บทสรุปผู้บริหาร',
-            'slide2_p1': 'ภารกิจของ <strong>[ReachGold]</strong> คือการเป็นแพลตฟอร์ม \'เทรดและออมทอง O2O\' ที่ง่ายที่สุด ปลอดภัยที่สุด และน่าเชื่อถือที่สุดในตลาดประเทศไทย',
-            'slide2_b1_strong': 'ซัพพลายเชน độc quyền:',
+            'slide2_p1': 'ภารกิจของ <strong>[ReachGold]</strong> คือการให้บริการแพลตฟอร์มทองคำ O2O ที่ขับเคลื่อนด้วย AI ในไทย เราบรรลุ LTV ที่สูงโดยผสมผสาน **\'AI + ประกันคุ้มครองเงินทุน\'** และ **\'โหมด AI สำหรับมือใหม่\'** และบรรลุ CAC ที่ต่ำผ่าน **\'เศรษฐกิจ GoldBits™ ฟรีเทียร์\'** และ MLM ที่ถูกกฎหมาย',
+            'slide2_b1_strong': 'ซัพพลายเชนพิเศษ:',
             'slide2_b1_text': 'พาร์ทเนอร์เหมืองทอง/โรงหล่อในไทย รับประกันราคาและความเสถียร',
-            'slide2_b2_strong': 'กลยุทธ์ AI:',
-            'slide2_b2_text': 'ลด OPEX ด้วย AI KYC/Chatbot, เพิ่ม LTV ด้วย AI Target-Ad',
+            'slide2_b2_strong': 'AI + ประกัน (LTV↑):',
+            'slide2_b2_text': 'AI ประเมินความเสี่ยงและเสนอขายผลิตภัณฑ์ \'ประกันคุ้มครองเงินทุน (CP)\' แบบไดนามิก',
             'slide2_b3_strong': 'O2O ไฮบริด:',
             'slide2_b3_text': 'ออมแบบดิจิทัล (Online) และถอนเป็นทองคำแท่ง (Offline) ได้ทุกเมื่อ',
-            'slide2_b4_strong': 'การเติบโตแบบไวรัล:',
-            'slide2_b4_text': 'ลด CAC ด้วยโมเดล MLM ถูกกฎหมายและ Gamification แบบ \'CashWalk\'',
+            'slide2_b4_strong': 'เศรษฐกิจ GoldBits™ (CAC↓):',
+            'slide2_b4_text': 'ดึงดูดผู้ใช้ (DAU) ด้วย \'เล่นฟรี (เดิน/ควิซ)\' และเปลี่ยนเป็นผู้สมัครสมาชิกแบบชำระเงิน (LTV)',
             'slide3_title': 'ปัญหาของตลาด',
-            'slide3_p1': 'คนไทยรักทองและมีความต้องการลงทุนสูง แต่ยังคงเจอปัญหา:',
+            'slide3_p1': 'คนไทยรักทองและมีความต้องการลงทุนสูง แต่ยังคงเจอปัญหา โดยเฉพาะ **มือใหม่**:',
             'slide3_b1_strong': 'อุปสรรคสูง:',
             'slide3_b1_text': 'ร้านทอง/ธนาคารมีค่าธรรมเนียมสูง, ลงทุนน้อย (<1g) แทบไม่ได้',
-            'slide3_b2_strong': 'การจัดเก็บและความปลอดภัย:',
-            'slide3_b2_text': 'การเก็บทองคำแท่งไว้กับตัวมีความเสี่ยงสูง (โขมย, สูญหาย)',
+            'slide3_b2_strong': 'ความเสี่ยงด้านความผันผวน:',
+            'slide3_b2_text': 'มือใหม่กลัวการขาดทุน (Drawdown) จากความผันผวนของราคาในระยะสั้นหลังการซื้อ',
             'slide3_b3_strong': 'ความไม่สะดวก:',
             'slide3_b3_text': 'ต้องเดินทางไปร้านทองทุกครั้งที่ต้องการซื้อหรือขาย',
             'slide4_title': 'ทางออกของเรา',
             'slide4_p1': '<strong>[ReachGold]</strong> คือโซลูชันไฮบริดครบวงจรที่แก้ทุกปัญหา',
-            'slide4_b1_strong': 'ออมง่าย (Online):',
-            'slide4_b1_text': 'ออมทองได้แม้จำนวนน้อย (เช่น 100 บาท) ผ่านแอปมือถือ',
-            'slide4_b2_strong': 'ปลอดภัยในโลกดิจิทัล:',
-            'slide4_b2_text': 'AI FDS ปกป้อง 24/7, ทองทั้งหมดถูกเก็บในตู้เซฟพันธมิตร',
-            'slide4_b3_strong': 'ถอนจริงได้ (Offline):',
-            'slide4_b3_text': 'แลกทองดิจิทัลเป็นทองคำแท่งจริงได้จากพาร์ทเนอร์ที่เชื่อถือได้',
-            'slide4_b4_strong': 'UI/UX ระดับโลก:',
-            'slide4_b4_text': 'ปุ่มลอยสำหรับเปลี่ยนภาษา (Th/En/Ko), แสดงผลค่าเงิน (THB) และ (USD) คู่กัน',
-            'slide5_title': 'ความได้เปรียบหลัก',
-            'slide5_t1_h3': 'ซัพพลายเชน 독점',
-            'slide5_t1_p': 'พาร์ทเนอร์เหมือง/โรงหล่อในไทย ราคาดี, อุปทานมั่นคง',
-            'slide5_t2_h3': 'ไวรัล MLM ถูกกฎหมาย',
-            'slide5_t2_p': 'ตาม พ.ร.บ. ขายตรงฯ ไม่มีค่าสมัคร, รับรางวัลจากการเทรดจริง',
-            'slide5_t3_h3': 'Gamification',
-            'slide5_t3_p': 'โมเดล \'CashWalk\' เดิน/ดูโฆษณารับทอง (เพิ่ม DAU, สร้างรายได้โฆษณา)',
-            'slide5_t4_h3': 'สถาปัตยกรรมแบบ Lean',
-            'slide5_t4_p': 'Centralized Ledger ที่พิสูจน์แล้ว & AI Security. ลด CAPEX, TTM รวดเร็ว',
-            'slide6_title': 'กลยุทธ์การเติบโต (Low CAC)',
-            'slide6_p1': 'จุดแข็งของเราคือการลด CAC ให้ใกล้ศูนย์ผ่านไวรัลที่ถูกกฎหมายและ Gamification',
+            'slide4_b1_strong': '✨ โหมด AI สำหรับมือใหม่ (SafeStart):',
+            'slide4_b1_text': 'โฟลว์ "เริ่มต้นปลอดภัย" คลิกเดียว, ออเดอร์ขนาดเล็ก (50-500 บาท), พร้อมคำอธิบายภาษาไทยง่ายๆ โดย AI',
+            'slide4_b2_strong': '✨ ประกันคุ้มครองเงินทุน (RG-CP):',
+            'slide4_b2_text': 'ตัวเลือกประกันที่ครอบคลุมความเสี่ยงผันผวนระยะสั้น (T+7 วัน) เพื่อขจัดความกังวลของมือใหม่',
+            'slide4_b3_strong': 'UI/UX ระดับโลก (i18n):',
+            'slide4_b3_text': 'ปุ่มลอยสำหรับเปลี่ยนภาษา (Th/En/Ko), แสดงผลค่าเงิน (THB) และ (USD) คู่กัน',
+            'slide4_b4_strong': 'ถอนจริงได้ (Offline):',
+            'slide4_b4_text': 'แลกทองดิจิทัลเป็น \'ทองคำแท่งจริง\' ได้จากพาร์ทเนอร์ที่เชื่อถือได้',
+            'slide5_title': '✨ 4 เสาหลักผลิตภัณฑ์',
+            'slide5_t1_h3': 'Trade & Save (เทรด/ออม)',
+            'slide5_t1_p': 'เทรดและออมทองง่ายๆ ตามกรัม (g) หรือบาท (THB) พร้อมราคาสองสกุล (USD/THB)',
+            'slide5_t2_h3': 'Insurance Suite (ประกัน)',
+            'slide5_t2_p': 'ผลิตภัณฑ์เช่น RG-CP (คุ้มครองเงินทุน) และ RG-CU (คุ้มครองการจัดเก็บ) พร้อมเบี้ยประกันไดนามิกที่คำนวณโดย AI (สร้างรายได้เสริม)',
+            'slide5_t3_h3': 'Bundles (การสมัครสมาชิก)',
+            'slide5_t3_p': 'ระดับ Basic/Plus/Max โมเดล MRR ที่รวมส่วนลดค่าธรรมเนียม, ส่วนลดเบี้ยประกัน, และฟีเจอร์ AI Advisor',
+            'slide5_t4_h3': 'GoldBits™ (M2E Free Tier)',
+            'slide5_t4_p': 'รับ GoldBits™(คะแนน) จากการเดิน/ควิซ/โฆษณา แลกเป็นคูปองค่าธรรมเนียม/ประกัน (CAC↓, ช่องทางสู่ LTV)',
+            'slide6_title': 'กลยุทธ์การเติโต (Low CAC)',
+            'slide6_p1': 'แกนหลักของเราคือ \'เศรษฐกิจ GoldBits™\' และ \'ไวรัลถูกกฎหมาย\' ที่ขับเคลื่อนต้นทุนการได้มาซึ่งลูกค้า (CAC) ให้ใกล้ศูนย์',
             'slide6_b1_strong': 'MLM Viral Engine:',
             'slide6_b1_text': 'แบ่งค่าธรรมเนียมการเทรดจริงให้ผู้แนะนำ (N ระดับ) (ไม่ใช่แชร์ลูกโซ่)',
-            'slide6_b2_strong': 'โมเดล \'CashWalk\':',
-            'slide6_b2_text': 'เดิน/ดูโฆษณารับทอง. (1) สร้างรายได้โฆษณา, (2) รักษา DAU, (3) เปลี่ยนผู้ใช้ฟรีเป็นผู้ลงทุน',
+            'slide6_b2_strong': '✨ เศรษฐกิจ GoldBits™ (M2E):',
+            'slide6_b2_text': 'รับ GoldBits™(คะแนน) จากการเดิน/ควิซ/โฆษณา แลกเป็นคูปองค่าธรรมเนียม/ประกันเท่านั้น (ไม่ใช่เงินสด) (1) สร้างรายได้โฆษณา, (2) รักษา DAU, (3) เปลี่ยนเป็นผู้ใช้แบบชำระเงิน',
             'slide6_b3_strong': 'Social Lock-in:',
             'slide6_b3_text': 'ส่งทองเป็นของขวัญ, ระดับ VIP, จัดอันดับในชุมชนเพื่อสร้างการมีส่วนร่วม',
             'slide7_title': 'โมเดลธุรกิจ (Monetization)',
-            'slide7_l1': 'โฆษณา AI (40%)',
-            'slide7_l2': 'ค่าธรรมเนียมเทรด/ออม (35%)',
-            'slide7_l3': 'ค่าธรรมเนียมถอนจริง O2O (15%)',
-            'slide7_l4': '(เฟส 2) สินเชื่อทองคำ (10%)',
-            'slide7_p1': '* โฆษณา AI, เชื่อมโยงกับระบบรางวัล,<br>จะเป็นรายได้หลักเทียบเท่าค่าธรรมเนียมการเทรด',
+            'slide7_l1': '✨ รายได้การสมัครสมาชิก (MRR) (40%)',
+            'slide7_l2': 'ค่าธรรมเนียมเทรด/ออม (30%)',
+            'slide7_l3': '✨ ประกันและบริการเสริม (20%)',
+            'slide7_l4': 'โฆษณา AI (เชื่อมโยง GoldBits™) (10%)',
+            'slide7_p1': '* ผู้ใช้ที่ได้มาจากโฆษณา AI (Free Tier) จะถูกเปลี่ยน<br>ไปยัง **โมเดลการสมัครสมาชิก (Paid Tier)** ที่มีกำไรสูงเพื่อเพิ่ม LTV',
             'slide8_title': 'ข้อสมมติฐานหลัก (ARPU)',
             'slide8_t1_h3': 'MAU ทั้งหมด (100%)',
-            'slide8_t1_p': 'เป้าหมาย 700k MAU ในปีที่ 3 ผ่านไวรัล(MLM) & Gamification',
-            'slide8_t2_h3': 'ผู้ใช้ที่ฝากเงิน (20% ของ MAU)',
-            'slide8_t2_p': '$10 ARPU ต่อเดือน (ค่าธรรมเนียมเทรด, O2O)',
-            'slide8_t3_h3': 'ผู้ใช้ที่ไม่ฝากเงิน (80% ของ MAU)',
-            'slide8_t3_p': '$1.25 ARPU ต่อเดือน (รายได้โฆษณา AI)',
+            'slide8_t1_p': 'เป้าหมาย 700k MAU ในปีที่ 3 ผ่านไวรัล(MLM) & GoldBits™(M2E)',
+            'slide8_t2_h3': '✨ ผู้ใช้แบบชำระเงิน (25% ของ MAU)',
+            'slide8_t2_p': '$12 ARPU ต่อเดือน (MRR, ค่าธรรมเนียมเทรด/ประกันหลังหักส่วนลด)',
+            'slide8_t3_h3': '✨ ผู้ใช้ฟรี (75% ของ MAU)',
+            'slide8_t3_p': '$0.67 ARPU ต่อเดือน (รายได้โฆษณา AI - GoldBits™)',
             'slide8_t4_h3': 'Blended ARPU (MAU ทั้งหมด)',
-            'slide8_t4_p': '($10 * 20%) + ($1.25 * 80%) = <strong>$3.00/เดือน</strong><br>(เพิ่มเป็น $3.25 เมื่อมีสินเชื่อในเฟส 2)',
+            'slide8_t4_p': '($12 * 25%) + ($0.67 * 75%) = <strong>$3.50/เดือน</strong><br>(ARPU & LTV เพิ่มขึ้น 16% เทียบกับโมเดล $3.00)',
             'slide9_title': 'กลยุทธ์หลัก AI 4 ประการ (โดย Gemini)',
             'slide9_t1_h3': '✨ AI FDS & AML',
-            'slide9_t1_p': 'Gemini วิเคราะห์ธุรกรรม/ข้อความแบบเรียลไทม์เพื่อตรวจจับและบล็อกการฟอกเงินและการละเมิด',
-            'slide9_t2_h3': '✨ AI Chatbot 2.0 (ผู้ช่วยสินทรัพย์)',
-            'slide9_t2_p': 'ผู้ช่วย AI 24/7 ที่ขับเคลื่อนโดย Gemini ซึ่งเข้าใจคำถามที่ซับซ้อนเกี่ยวกับสินทรัพย์/MLM ช่วยลด OPEX',
-            'slide9_t3_h3': '✨ AI Dynamic Ad Engine (Gemini)',
-            'slide9_t3_p': 'Gemini สร้างโฆษณาที่ปรับให้เหมาะกับแต่ละบุคคล (hyper-personalized) แบบเรียลไทม์ตามพฤติกรรมของผู้ใช้',
-            'slide9_t4_h3': '✨ AI Personal Advisor (Gemini)',
-            'slide9_t4_p': 'เรียนรู้เป้าหมายผู้ใช้ (เช่น "ออม 100g สำหรับแต่งงาน") ส่งรายงาน/แจ้งเตือนที่กำหนดเอง และสรุปด้วยเสียง TTS',
+            'slide9_t1_p': 'Gemini วิเคราะห์ธุรกรรม/ข้อความแบบเรียลไทม์เพื่อตรวจจับและบล็อกการฟอกเงินและการละเมิด (การจัดการความเสี่ยง)',
+            'slide9_t2_h3': '✨ AI กำหนดราคาประกันแบบไดนามิก',
+            'slide9_t2_p': 'Gemini วิเคราะห์ระดับความเสี่ยงของผู้ใช้ (A-E) และความผันผวนของตลาด (σ) เพื่อกำหนดเบี้ยประกัน RG-CP แบบเรียลไทม์ (เพิ่มรายได้สูงสุด)',
+            'slide9_t3_h3': '✨ AI โฆษณาไดนามิก (GoldBits™)',
+            'slide9_t3_p': 'Gemini สร้างโฆษณาที่เชื่อมโยง \'รางวัลการเดิน\' กับ \'คูปองส่วนลดเบี้ยประกัน\' เพื่อเพิ่ม eCPM และอัตราการแปลงเป็นผู้ใช้จ่ายเงิน',
+            'slide9_t4_h3': '✨ AI ที่ปรึกษาส่วนตัว (HISO)',
+            'slide9_t4_p': 'เรียนรู้เป้าหมายผู้ใช้ (เช่น "ออม 100g สำหรับแต่งงาน") ส่งรายงาน/แจ้งเตือนที่กำหนดเอง และสรุปด้วยเสียง TTS ระดับพรีเมียม',
             'slide10_title': 'Gemini API: สมองของ ReachGold',
             'slide10_t1_h3': '✨ AI Advisor (TTS & Search)',
-            'slide10_t1_p': 'Gemini สรุปสภาวะตลาดทองคำ (ผ่าน Google Search) และ \'สรุปสินทรัพย์รายวัน\' ด้วยเสียง TTS ระดับพรีเมียม',
+            'slide10_t1_p': 'Gemini สรุปสภาวะตลาดทองคำ (ผ่าน Google Search) และ \'สรุปสินทรัพย์รายวัน\' ด้วยเสียง TTS ระดับพรีเมียมเพื่อประสบการณ์แบบ HISO',
             'slide10_t2_h3': '✨ AI Chatbot 2.0 (Multi-turn)',
-            'slide10_t2_p': 'ด้วยตรรกะ multi-turn ของ Gemini สามารถตอบคำถามซับซ้อน เช่น "ใครคือผู้แนะนำระดับ 3 ที่ทำผลงานดีที่สุดของฉัน?"',
+            'slide10_t2_p': 'ด้วยตรรกะ multi-turn ของ Gemini สามารถตอบคำถามซับซ้อน เช่น "ใครคือผู้แนะนำระดับ 3 ที่ทำผลงานดีที่สุดของฉัน?" ทันที',
             'slide10_t3_h3': '✨ AI Dynamic Ad Copy (Gen-Text)',
             'slide10_t3_p': 'Gemini สร้างข้อความโฆษณาที่เชื่อมโยง \'รางวัลการเดิน\' กับ \'การออมทอง\' แบบเรียลไทม์ เพิ่มรายได้โฆษณา (LTV)',
+            'slide10_t4_h3': '✨ AI ตรวจสอบการเคลมประกัน (RAG)',
+            'slide10_t4_p': 'Gemini (RAG) ตรวจสอบรายละเอียดการเคลมกับข้อมูล FDS และเงื่อนไขกรมธรรม์ เพื่ออนุมัติ/ปฏิเสธ/ส่งต่อให้เจ้าหน้าที่ตรวจสอบโดยอัตโนมัติ',
             'slide11_title': 'กฎหมายและการบริหารความเสี่ยง',
             'slide11_b1_strong': '[สำคัญที่สุด] ความเสี่ยงกฎหมาย MLM:',
             'slide11_b1_text': 'ปฏิบัติตาม พ.ร.บ. ขายตรง (พ.ศ. 2545) (1) ไม่มีค่าสมัคร (2) รางวัลอิงจากค่าธรรมเนียมการเทรดจริง = \'MLM ถูกกฎหมาย\' (ยืนยันโดยสำนักกฎหมาย)',
             'slide11_b2_strong': 'KYC/AML:',
-            'slide11_b2_text': 'ระบบยืนยันตัวตนและ AML ที่แข็งแกร่งผ่าน AI FDS และการเชื่อมต่อกับ NDID',
-            'slide11_b3_strong': 'ความเสี่ยงด้านราคา:',
-            'slide11_b3_text': 'สต็อกทองคำของแพลตฟอร์มจะถูกจัดการความเสี่ยงผ่านกลยุทธ์ Hedging แบบมืออาชีพ',
+            'slide11_b2_text': 'ระบบ AML ที่แข็งแกร่งผ่าน AI FDS, NDID และการเชื่อมต่อ Crypto Travel Rule (VASP partner)',
+            'slide11_b3_strong': '✨ ความเพียงพอของเงินกองทุนประกัน (Solvency):',
+            'slide11_b3_text': 'ติดตามอัตราส่วนความเพียงพอของเงินกองทุน (>130%) แบบเรียลไทม์ หาก Loss Ratio (LR) พุ่งสูง AI จะเพิ่มเบี้ยประกัน (S1) หรือใช้การประกันต่อ (S3) อัตโนมัติ',
             'slide12_title': 'เทคโนโลยี: Lean & Trust Architecture',
-            'slide12_p1': '<strong>แกนหลัก:</strong> แทนที่ความซับซ้อนของบล็อกเชน เราใช้ <strong>\'Centralized Digital Ledger (PostgreSQL)\'</strong> ที่พิสูจน์แล้ว พร้อม \'Immutable Audit Logs\' เพื่อความน่าเชื่อถือระดับธนาคาร',
+            'slide12_p1': '<strong>แกนหลัก:</strong> เราใช้ <strong>\'Centralized Digital Ledger (PostgreSQL)\'</strong> ที่พิสูจน์แล้ว พร้อม \'Immutable Audit Logs\' เพื่อความน่าเชื่อถือระดับธนาคาร (แทนที่ความซับซ้อนของบล็อกเชน)',
             'slide12_th1': 'หมวดหมู่',
             'slide12_th2': 'Tech Stack',
             'slide12_th3': 'เหตุผล',
             'slide12_r1c1': 'Frontend',
             'slide12_r1c3': 'Single codebase (iOS/Android/Web), <strong>รองรับหลายภาษา (Ko/En/Th)</strong>, TTM รวดเร็ว',
             'slide12_r2c1': 'Backend',
-            'slide12_r2c3': 'MSA ที่พิสูจน์แล้ว, เอนจิ้นราคาเรียลไทม์, <strong>เอนจิ้นอัตราแลกเปลี่ยน USD/THB</strong>',
+            'slide12_r2c3': 'MSA ที่พิสูจน์แล้ว, เอนจิ้นราคาเรียลไทม์, <strong>เอนจิ้นอัตราแลกเปลี่ยน USD/THB</strong>, ลอจิกประกัน/การสมัครสมาชิก',
             'slide12_r3c1': 'Database',
-            'slide12_r3c3': 'บัญชีแยกประเภท (ACID) & แคชราคา/อันดับเรียลไทม์',
+            'slide12_r3c3': 'บัญชีแยกประเภทการเงิน/ประกัน (ACID) & แคชราคา/อันดับเรียลไทม์',
             'slide12_r4c1': 'AI / ML',
-            'slide12_r4c3': 'FDS, KYC, Chatbot, เอนจิ้นโฆษณา และ API serving',
-            'slide12_r5c1': 'Cloud Infra',
-            'slide12_r5c3': 'การปรับใช้ที่เสถียรบนคอนเทนเนอร์ & auto-scaling',
+            'slide12_r4c3': 'FDS, KYC, Chatbot, Dynamic Pricing, Ads, Underwriting (RAG)',
+            'slide12_r5c1': 'Payments',
+            'slide12_r5c3': 'Card, QR(PromptPay), Bank, e-Wallet, <strong>Crypto(USDT)</strong> รวมผ่าน Orchestrator',
             'slide13_title': 'ประมาณการทางการเงิน 3 ปี (P&L)',
             'slide13_p1': '* (หน่วย: ล้านบาท, $M) | (ข้อสงวนสิทธิ์: ตัวเลขนี้เป็นประมาณการจากข้อสมมติฐานหลัก และอาจแตกต่างจากผลจริง)',
             'slide13_th1': 'รายการ',
@@ -1318,16 +1413,16 @@
             'slide14_title': `ข้อเสนอ (Seed Round): ${formatTh(baseAmounts.seedAskTHB)} (${formatUsd(baseAmounts.seedAskUSD)})`,
             'slide14_l1': `การพัฒนาหลัก (CAPEX): ${formatTh(baseAmounts.capexTHB)} (55%)`,
             'slide14_l2': `ปฏิบัติการ/การตลาด (OPEX): ${formatTh(baseAmounts.opexTHB)} (45%)`,
-            'slide14_p1': '* CAPEX: เงินเดือนทีมพัฒนา 12 เดือน (C#, C++, Flutter, AI)<br>* OPEX: งบประมาณรางวัลไวรัล, การตลาด, Infra, G&A',
-            'slide15_title': 'แผนงาน (Roadmap)',
-            'slide15_t1_h3': 'เฟส 1 (เดือน 1-6)',
-            'slide15_t1_p': 'เปิดตัว MVP (เทรด/ออม/O2O), <strong>รองรับภาษา (Th/En) & สกุลเงิน USD/THB</strong>, AI KYC/Chatbot, ✨Gemini Advisor 1.0, ระบบไวรัล (MLM) 1.0',
-            'slide15_t2_h3': 'เฟส 1 (เดือน 7-12)',
-            'slide15_t2_p': 'ใช้ AI FDS 1.0, พัฒนา Gamification, ตั้งเป้า BEP ต่อเดือน',
-            'slide15_t3_h3': 'เฟส 2 (เดือน 13-18)',
-            'slide15_t3_p': 'ขยายเอนจิ้นโฆษณา AI (เพิ่มรายได้), เปิดตัวสินเชื่อทองคำ (เฟส 2), <strong>ขยายการรองรับภาษา (เกาหลี)</strong>',
-            'slide15_t4_h3': 'เฟส 2 (เดือน 19-24)',
-            'slide15_t4_p': 'เพิ่มประสิทธิภาพ LTV & การดำเนินงาน, วิจัยตลาด ASEAN (เวียดนาม, อินโดนีเซีย)',
+            'slide14_p1': '* CAPEX: เงินเดือนทีมพัฒนา 12 เดือน (C#, C++, Flutter, AI)<br>* OPEX: งบประมาณรางวัลไวรัล/GoldBits™, การตลาด, Infra, G&A',
+            'slide15_title': 'แผนงาน (Final Build: 6 เดือน GA)',
+            'slide15_t1_h3': 'M1-M2 (0-2 เดือน)',
+            'slide15_t1_p': 'MVP (เทรด/O2O), <strong>✨AI Novice (SafeStart)</strong>, <strong>✨GoldBits™ Ledger (เดิน/ควิซ)</strong>, PromptPay/Bank VA, <strong>✨เอนจิ้นราคา/DB ประกัน</strong>, Admin(KYC/Wallet)',
+            'slide15_t2_h3': 'M3-M4 (3-4 เดือน)',
+            'slide15_t2_p': '<strong>✨แคตตาล็อก/การเรียกเก็บเงิน (Bundles)</strong>, <strong>✨บัญชี Pool/การเคลมประกัน</strong>, <strong>✨Crypto(USDT) Deposits (Beta)</strong>, e-Wallets, AI Advisor+, FDS v1, คอนโซล Growth(Missions)',
+            'slide15_t3_h3': 'M5-M6 (5-6 เดือน)',
+            'slide15_t3_p': '<strong>✨โมดูลประกันต่อ</strong>, พอร์ทัลพาร์ทเนอร์, FDS/AML ขั้นสูง, การปฏิบัติตาม PCI/PDPA, การปรับจูนเศรษฐกิจ GoldBits™',
+            'slide15_t4_h3': 'GA (เดือนที่ 6)',
+            'slide15_t4_p': 'เปิดตัวอย่างเป็นทางการ (Full Payments, Insurance, Bundles, Admin, GoldBits™)',
             'slide16_title': 'ทีมงานหลัก',
             'slide16_t1_h3': '[ผู้ก่อตั้ง/CEO]',
             'slide16_t1_h4': '(TBD)',
@@ -1347,31 +1442,39 @@
     };
     
     // --- Helper Functions for Currency Formatting ---
-    // Using 10억 as 1B (Billion KRW)
+    
+    // Format KRW (e.g., 10억 원, 5.5억 원)
     function formatKr(num, short = false) {
+        // short=false: returns Korean style with 억 원/백만 원
+        // short=true: return billions in KRW (e.g., 1.0B KRW) for EN locale usage
+
         if (short) {
-             return (num / 1000000000).toFixed(0) + 'B'; // 1B
+            return (num / 1000000000).toFixed(1).replace('.0','') + 'B KRW';
         }
         if (num >= 1000000000) {
-            return (num / 1000000000).toFixed(0) + '억 원'; // 10억 원
+            // 10억 원
+            return (num / 1000000000).toFixed(0) + '억 원';
         } else if (num >= 100000000) {
-            return (num / 100000000).toFixed(1).replace('.0', '') + '억 원'; // 5.5억 원
+            // 5.5억 원
+            return (num / 100000000).toFixed(1).replace('.0', '') + '억 원';
         } else {
             return (num / 1000000).toFixed(0) + '백만 원';
         }
     }
     
+    // Format USD (e.g., $770K, $1M)
     function formatUsd(num) {
         if (num >= 1000000) {
-            return '$' + (num / 1000000).toFixed(0) + 'M'; // $1M (Using $1M from user text, but calculations based on 10eok)
+            return '$' + (num / 1000000).toFixed(1).replace('.0', '') + 'M'; // $1M
         } else {
             return '$' + (num / 1000).toFixed(0) + 'K'; // $770K
         }
     }
     
+    // Format THB (e.g., ฿26M)
     function formatTh(num) {
         if (num >= 1000000) {
-            return '฿' + (num / 1000000).toFixed(0) + 'M'; // ฿26M
+            return '฿' + (num / 1000000).toFixed(1).replace('.0', '') + 'M'; // ฿26M
         } else {
             return '฿' + (num / 1000).toFixed(0) + 'K';
         }
@@ -1398,6 +1501,12 @@
             const key = el.getAttribute('data-i18n');
             if (translations[lang][key]) {
                 el.innerHTML = translations[lang][key];
+            } else {
+                // Fallback for missing keys (e.g., slide1_h1 added later)
+                const enKey = el.getAttribute('data-i18n');
+                if(translations['en'][enKey]) {
+                     el.innerHTML = translations['en'][enKey];
+                }
             }
         });
 
@@ -1417,23 +1526,23 @@
         const seedAskEl = document.querySelector('[data-i18n="slide14_title"]');
         const capexEl = document.querySelector('[data-i18n="slide14_l1"]');
         const opexEl = document.querySelector('[data-i18n="slide14_l2"]');
-        // const finP1El = document.querySelector('[data-i18n="slide13_p1"]'); // Financials disclaimer - REMOVED
+        const finP1El = document.querySelector('[data-i18n="slide13_p1"]'); // Financials disclaimer
 
         if (lang === 'ko') {
             seedAskEl.innerHTML = `투자 요청 (Seed Round): ${formatKr(baseAmounts.seedAskKRW)} (${formatUsd(baseAmounts.seedAskUSD)})`;
             capexEl.innerHTML = `핵심 개발 (CAPEX): ${formatKr(baseAmounts.capexKRW)} (55%)`;
             opexEl.innerHTML = `초기 운영/마케팅 (OPEX): ${formatKr(baseAmounts.opexKRW)} (45%)`;
-            // finP1El.innerHTML = '* (단위: 억 원, $M) | (면책 조항: 상기 추정은 핵심 가정에 기반한 예측치이며 실제와 다를 수 있습니다.)'; - REMOVED
+            finP1El.innerHTML = '* (단위: 백만 달러, $M) | (면책 조항: 상기 추정은 핵심 가정에 기반한 예측치이며 실제와 다를 수 있습니다.)';
         } else if (lang === 'en') {
             seedAskEl.innerHTML = `The Ask (Seed Round): ${formatUsd(baseAmounts.seedAskUSD)} (₩${formatKr(baseAmounts.seedAskKRW, true)})`;
             capexEl.innerHTML = `Core Development (CAPEX): ${formatUsd(baseAmounts.capexUSD)} (55%)`;
             opexEl.innerHTML = `Initial Ops/Marketing (OPEX): ${formatUsd(baseAmounts.opexUSD)} (45%)`;
-            // finP1El.innerHTML = '* (Unit: $M USD) | (Disclaimer: These projections are based on key assumptions and may differ from actual results.)'; - REMOVED
+            finP1El.innerHTML = '* (Unit: $M USD) | (Disclaimer: These projections are based on key assumptions and may differ from actual results.)';
         } else if (lang === 'th') {
             seedAskEl.innerHTML = `ข้อเสนอ (Seed Round): ${formatTh(baseAmounts.seedAskTHB)} (${formatUsd(baseAmounts.seedAskUSD)})`;
             capexEl.innerHTML = `การพัฒนาหลัก (CAPEX): ${formatTh(baseAmounts.capexTHB)} (55%)`;
             opexEl.innerHTML = `ปฏิบัติการ/การตลาด (OPEX): ${formatTh(baseAmounts.opexTHB)} (45%)`;
-            // finP1El.innerHTML = '* (หน่วย: ล้านบาท, $M) | (ข้อสง환สิทธิ์: ตัวเลขนี้เป็นประมาณการจากข้อสมมติฐานหลัก และอาจแตกต่างจากผลจริง)'; - REMOVED
+            finP1El.innerHTML = '* (หน่วย: ล้านบาท, $M) | (ข้อสงวนสิทธิ์: ตัวเลขนี้เป็นประมาณการจากข้อสมมติฐานหลัก และอาจแตกต่างจากผลจริง)';
         }
     }
 
@@ -1443,11 +1552,13 @@
         let userLang = navigator.language || navigator.userLanguage;
         let defaultLang = 'ko';
         
-        if (userLang.startsWith('en')) {
-            defaultLang = 'en';
-        } else if (userLang.startsWith('th')) {
+        // Default to Thai if IP/browser is Thai
+        if (userLang.startsWith('th')) {
             defaultLang = 'th';
+        } else if (userLang.startsWith('en')) {
+            defaultLang = 'en';
         }
+        // Otherwise, default to Korean
         
         changeLanguage(defaultLang);
     }
